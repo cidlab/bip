@@ -17,4 +17,4 @@ latex main.tex
 
 dvipdf main.dvi
 
-evince main.pdf &
+cp main.pdf ../book.pdf
