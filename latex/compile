@@ -1,0 +1,20 @@
+#!/bin/bash
+
+latex main.tex
+bibtex bi0
+bibtex bi1
+bibtex bi2
+bibtex bi3
+bibtex bi4
+bibtex ml1
+bibtex em1
+bibtex 8st
+bibtex zd1
+bibtex don
+bibtex main.aux
+latex main.tex
+latex main.tex
+
+dvipdf main.dvi
+
+evince main.pdf &

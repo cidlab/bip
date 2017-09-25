@@ -1,0 +1,938 @@
+\cptr{Introduction to Bayesian inference for psychology}
+{Introduction to Bayesian inference for psychology}
+{Alexander Etz and Joachim Vandekerckhove}
+
+\setlength{\epigraphwidth}{0.9\columnwidth}
+\epigraph{Dark and difficult times lie ahead. Soon we must all face the choice between what is right and what is easy.}{A.~P.~W.~B.~Dumbledore}
+
+\section{Introduction}
+{Bayesian methods by themselves are neither dark nor, we believe, particularly difficult.  In some ways, however, they are radically different from classical statistical methods and as such, rely on a slightly different way of thinking that may appear unusual at first.  Bayesian estimation of parameters will usually not result in a single estimate, but will yield a range of estimates with varying plausibilities associated with them; and Bayesian hypothesis testing will rarely result in the falsification of a theory but rather in a redistribution of probability between competing accounts.
+}
+
+Bayesian methods are {also} not new, with their first use dating back to the \nth{18} century. Nor are they new to psychology: They were introduced to \rem{psychologists}{the field} over 50 years ago, in what today remains a remarkably insightful exposition by Ward Edwards, Harold Lindman, and L.~J. Savage \citeyear{EdwardsEtAl1963}. 
+
+Nonetheless, until recently Bayesian methods have not been particularly mainstream in the social sciences, so the recent increase in their adoption means they are new to most practitioners
+\rem{In this article, we provide technical background for the rest of the special issue, starting from first principles. We will first provide a short overview involving the definition of probability, the basic laws of probability theory (the \emph{product} and \emph{sum} rules of probability), and how Bayes' rule and its applications emerge from these two simple laws. We will then illustrate how the laws of probability can and should be used for \emph{inference} -- to draw conclusions from observed data. } {-- and}
+for many psychologists, learning about new statistical techniques can evoke understandable feelings of anxiety or trepidation. \rem{However}{At the same time}, recent revelations regarding the reproducibility of psychological science \cite<e.g.>{OpenScienceCollaboration2015RP,etzVandekerckhove2016} have spurred interest in the statistical methods that find use in the field. 
+
+{In the present article, we provide a gentle technical introduction to the rest of the special issue, starting from first principles. We will first provide a short overview involving the definition of probability, the basic laws of probability theory (the \emph{product} and \emph{sum} rules of probability), and how Bayes' rule and its applications emerge from these two simple laws. We will then illustrate how the laws of probability can and should be used for \emph{inference}: to draw conclusions from observed data.}
+\rem{In the present introduction} We do not shy away from showing formulas and mathematical exposition, but where possible we connect them to a visual aid, either in a figure or a table, to make the concepts they represent more tangible. We also provide examples after each main section to illustrate how these ideas can be put into practice. Most of the {key} ideas outlined in this paper only require mathematical competence at the level of college algebra; as will be seen, many of the formulas are obtained by rearranging equations in creative ways such that the quantity of interest is on the left hand side of an equality. 
+
+At any point, readers more interested in the bigger picture than the technical details can safely skip the equations and focus on the examples and discussion. However, the use of verbal explanations only suffices to gain a superficial understanding of the \rem{deeper}{underlying} ideas and implications, so we provide mathematical formulas for those readers who are interested {in} a deeper appreciation. 
+{Throughout the text, we occasionally use footnotes to provide extra notational clarification for readers who may not be as well-versed with mathematical exposition.} 
+
+{While we maintain that the mathematical underpinnings serve understanding of these methods in important ways, we should also point out that recent developments regarding Bayesian statistical software packages \cite<e.g.,>{LoveSI,MatzkeSI,vanravenzwaaijSI,WagenmakersSI} have made it possible to perform many kinds of Bayesian analyses without the need to carry out any of the technical mathematical derivations. The mathematical basis we present here remains, of course, more general.} 
+
+{First, however, we will take some time to discuss a subtle semantic confusion between two interpretations of the key concept ``probability.'' The hurried reader may safely skip the section that follows (and advance to ``The Product and Sum Rules of Probability''), knowing only that we use the word ``probability'' to mean ``a degree of belief'': a quantity that indicates how strongly we believe something to be true.}
+
+\subsection{What is probability?}
+Throughout this \rem{introduction}{text}, we will be dealing with the concept of \emph{probability}. This presents an immediate philosophical problem, because the word ``probability'' is in some sense ambiguous: it will occasionally switch from one meaning to another and this difference in meaning is sometimes consequential.
+
+In one meaning---\rem{the Bayesian meaning}{sometimes called the \emph{epistemic} interpretation}---probability is a \emph{degree of belief}: it is a number between zero and one that quantifies how strongly we should think something to be true based on the relevant information we have. In other words, probability is a mathematical language for expressing our uncertainty.  This kind of probability is inherently subjective---because it depends on the information that \emph{you} have available---and reasonable people may reasonably differ in the probabilities that they assign to events (or propositions). \rem{In the Bayesian framework}{Under the epistemic interpretation}, there is hence no such thing as \textit{the} probability---there is only \textit{your} probability \cite{Lindley2000}. Your probability can be thought of as characterizing your state of incomplete knowledge, and in that sense probability does not exist beyond your mind.
+
+We may for example say ``There is a 60\% probability that the United Kingdom will be outside the European Union on December 31, 2018.'' Someone who believes there is a 60\% probability this event will occur should be willing to wager \emph{up to} \$6 against \$4 on the event, because their expected gain would be \emph{at least} $60\% \times (+4\$) + 40\% \times (-6\$)$, which is zero. In other words, betting more than \$6 would be unsound because they would expect to lose money, and to take such an action would not \textit{cohere} with what they believe. Of course, in scientific practice one is rarely forced to actually make such bets, but it would be unfortunate if our probabilities (and hence our inferences) could not be acted on with confidence if such an occasion were to arise \cite{hill1974}. 
+
+The fact that {epistemic} probabilities of events are subjective does not mean that they are \emph{arbitrary}.  Probabilities are not acts of will; they are subjective merely in the sense that they may differ from one individual to the next. That is just to say that different people bring different information to a given problem. Moreover, if different people update their beliefs in a rational way, then as data accumulate they will gradually approach agreement {\cite<unless they have a priori ruled out the point of agreement entirely; see, e.g.,>{jern2014belief}}. In fact, it can be shown that the only way that our pre-data beliefs (whatever those may be) will cohere with our post-data beliefs is to use probability to represent our uncertainty and update our beliefs according to the laws of probability \cite{Lindley2000}.
+
+In another meaning---the \rem{frequentist meaning}{\emph{physical} or \emph{aleatory}\footnote{From Latin \textit{alea}, meaning dice.} interpretation}---probability is a statement of an \emph{expected frequency over many repetitions of a procedure}. A \rem{frequentist}statement {of aleatory probability} might be ``If I flip a fair coin very many times, the ratio of flips on which the coin will come up heads is 50\%. Thus, the probability that a fair coin will come up heads is 50\%.''  These statements express properties of the \emph{long-run behavior} of well-defined processes, but they can not speak to singular events; they require assumptions about physical repeatability and independence among repetitions. 
+It is important to grasp that these frequencies are seen as being a real part of the physical world, in that ``the relative frequencies of a die falling this way or that way are `persistent' and constitute this die's measurable properties, comparable to its size and weight'' \cite[p.\ 99]{Neyman1977}. 
+{Neyman's quote provides an interesting contrast to the epistemic interpretation. Italian probabilist and influential Bayesian statistician Bruno de Finetti famously began his treatise \textit{Theory of Probability} by stating ``Probability does not exist'' and that ``the abandonment of superstitious beliefs about the existence of the Phlogiston, the Cosmic Ether, Absolute Space and Time, \dots or Fairies and Witches was an essential step along the road to scientific thinking. Probability, too, if regarded as something endowed with some kind of objective existence, is no less a misleading misconception, an illusory attempt to exteriorize or materialize our true probabilistic beliefs'' \cite[p.\ x]{deFinetti1974}. This is not to say that we cannot build models that assign probabilities to the outcomes of physical processes, only that they are necessarily abstractions.}\note{The inserted text above is slightly adapted from what was originally a footnote.}
+
+It is clear that these two interpretations of probability are not the same. There are many situations to which the \rem{frequency}{aleatory} definition does not apply and thus probabilities could not be determined: we will not see repeated instances of December 31, 2018, in which the UK could be inside or outside the EU, we will only see one such event. Similarly, ``what is the probability that \emph{this} coin, \emph{on the very next flip}, will come up heads?'' is not something to which \rem{a strict frequentist can assign a probability}{an aleatory probability applies}: there are no long-run frequencies to consider \emph{if there is only one flip {that matters}}.
+
+\rem{Probability-as-frequency}{Aleatory probability} may---in some cases---be a valid \emph{conceptual} interpretation of probability, but it is rarely ever an \emph{operational} interpretation \cite<see>{jaynes1984intuitive,winkler1972book,WrinchJeffreys1919}: it cannot apply to singular events {such as the truth or falsity of a scientific theory,}\rem{ and series of trials under precisely identical conditions can never be achieved,}so we simply cannot speak of \rem{probabilities-as-frequencies}{aleatory probabilities} when wrestling with the uncertainty we face in scientific practice. That is to say, we may validly use \rem{probability-as-frequency}{aleatory probability} to \emph{think about} probability in an abstract way, but not to make statements about real-world observed events such as experimental outcomes.
+
+In contrast, \rem{probability-as-belief}{epistemic probability} applies to any event that we care to consider---be it singular or repetitive---and if we have relevant information about real-world frequencies then we can choose to use that information to inform our beliefs. If repetition is possible and we find it reasonable to assume that the chance a coin comes up heads on a given toss does not change based on the outcome of previous tosses, then a Bayesian could reasonably believe both (a) that on the next toss there is a 50\% chance it comes up heads; \textit{and} (b) 50\% of tosses will result in heads in a very long series of flips. Hence, \rem{probability-as-belief}{epistemic probability} is both a \textit{conceptual} interpretation of probability \rem{as well as}{and} an \textit{operational} interpretation. \rem{Probability-as-belief}{Epistemic probability} can be seen as an extension of \rem{probability-as-frequency, which}{aleatory probability that} applies to all the cases where the latter would apply and to countless cases where it could not.
+
+\subsubsection{Why this matters} We argue that the distinction above is directly relevant for empirical psychology.  In the overwhelming majority of cases, psychologists are interested in making probabilistic statements about singular events: \emph{this} \rem{hypothesis}{theory} is either true or not; \textit{this} effect is either positive or negative; \textit{this} effect size is probably between $x$ and $y$; and either \textit{this} model or the other is more likely given the data. Seldom are we merely interested in the frequency with which a well-defined process will achieve a certain outcome. {Even arbitrarily long sequences of faithful replications of empirical studies serve to address a \emph{singular} question: ``is \emph{this} theory correct?''} We might reasonably define a certain behavioral model and assign parameters {(even parameters that are probabilities)} to it, and then examine its long-run behavior.  This is a valid \rem{frequentist}{aleatory} question.  However, it is not an inferential procedure: it is describing behavior of an idealized model but not making inferences with regard to that model.  We might also wonder how frequently a researcher will make errors of inference (however defined) under certain conditions, but this is a purely academic exercise; unless the \rem{frequency}{proportion of errors} is 0 or 1, such a {long-run} frequency alone does not allow us to determine the probability the researcher actually made an error regarding any \emph{singular} finding -- regarding \textit{this} coin, \textit{this} effect, or \textit{this} hypothesis. \rem{Bayesian}{By contrast, epistemic} probability expresses degrees of belief regarding specific, individual{, \emph{singular}} events, and for that reason should be the default for scientific inference.
+
+{In the next section, we will introduce the basic rules of probability theory. These rules are agnostic to our conception of probability---they hold equally for epistemic and aleatory probability---but throughout the rest of this paper and particularly in the examples, we will, unless otherwise noted, use an epistemic interpretation of the word ``probability.''}
+
+\subsection{The Product and Sum Rules of Probability}
+Here we will introduce the two cardinal rules of probability theory from which essentially all of Bayesian inference derives. However, before we venture into the laws of probability, there are notational conventions to draw. First, we will use $P(A)$ to denote the probability of some event $A$, where $A$ is a statement that can be true or false (e.g., $A$ could be ``it will rain today'', ``the UK will be outside the EU on December 31, 2018'', or ``the \nth{20} digit of $\pi$ is 3''). Next, we will use \rem{$(A|B)$} {$(B|A)$} to denote the \emph{conditional} event: the probability that \rem{$A$}{$B$} is true \emph{given that \rem{$B$}{$A$} is true} (e.g., $B$ could be ``it will rain tomorrow'') is \rem{$P(A|B)$}{$P(B|A)$: the probability that it will rain tomorrow given that it rained today}. \rem{If we assume $A$ and $B$ are statistically independent then $P(A)$ equals $P(A|B)$, since knowing $B$ happens tells us nothing about the chance $A$ happens.} Third, we will use $(A,B)$ to denote a \emph{joint} event: the probability that $A$ and $B$ are both true is $P(A,B)$. The joint probability $P(A,B)$ is of course equal to that of the joint probability $P(B,A)$: the event ``it rains tomorrow and today'' is logically the same as ``it rains today and tomorrow.'' Finally, we will use $(\neg A)$ to refer to the negation of $A$: the probability $A$ is false is $P(\neg A)$. These notations can be combined: if $C$ and $D$ represent the events ``it is hurricane season'' and ``it rained yesterday,'' respectively, then $P(A,B|\neg C,\neg D)$ is the probability that it rains today and tomorrow, given that ($\neg C$) it is not hurricane season and that ($\neg D$) it did not rain yesterday (i.e., both $C$ and $D$ are not true).
+
+With this notation in mind, we introduce the \textbf{Product Rule of Probability}:
+\begin{equation}
+\begin{array}{rcl}
+P(A,B) &=& P(B)P(A|B)\\ 
+&=& P(A)P(B|A).
+\end{array}
+\label{eq:prodrule}
+\end{equation}
+In words: the probability that $A$ and $B$ are both true is equal to the probability of $B$ multiplied by the conditional probability of $A$ \textit{assuming $B$ is true}.  Due to symmetry, this is also equal to the probability of $A$ multiplied by the conditional probability of $B$ \textit{assuming $A$ is true}. The probability it rains today and tomorrow is the probability it first rains today multiplied by the probability it rains tomorrow \textit{given that we know it rained today}.
+
+{If we assume $A$ and $B$ are statistically independent then $P(B)$ equals $P(B|A)$, since knowing $A$ happens tells us nothing about the chance $B$ happens.} \rem{If we assume $A$ and $B$ are statistically independent events, this} {In such cases, the product} rule simplifies as follows:
+\begin{equation}
+P(A,B) = P(A)P(B|A) = P(A)P(B).
+\label{eq:indep}
+\end{equation}
+Keeping with our example, this would mean calculating the probability it rains both today and tomorrow in such a way that knowledge of whether or not it rained today has no bearing on \rem{the}how strongly we should believe it will rain tomorrow.
+
+\begin{figure*}[tb]
+\begin{center}
+\includegraphics[scale=1.2,viewport=65 170 415 290,bb=65 170 415 290]{figs/bi0_etzvandekerckhove_fig1}
+\end{center}
+\caption{An illustration of the Product Rule of probability: The probability of the joint events on the right end of the diagram is obtained by multiplying the probabilities along the path that leads to it. The paths indicate where and how we are progressively splitting the initial probability into smaller subsets.  A suggested exercise to test understanding and gain familiarity with the rules is to construct the equivalent path diagram (i.e., that in which the joint probabilities are identical) starting on the left with a fork that depends on the event $B$ instead of $A$.}
+\label{fig:bi0:path}
+\end{figure*}
+
+Understanding the \textbf{Sum Rule of Probability} requires one further concept: the \emph{disjoint set}.  A disjoint set is nothing more than a collection of {mutually exclusive} events\rem{, exactly one of which must be true}. {To simplify the exposition, we will also assume that exactly one of these events must be true although that is not part of the common definition of such a set.}  The simplest example of \rem{such }a {disjoint} set is some event and its denial:\footnote{We use curly braces \{\ldots\} to indicate a set of events. Other common examples of disjoint sets are the possible outcomes of a coin flip: $\{$heads, tails$\}$, or the possible outcomes of a roll of a six-sided die: $\{1, 2, 3, 4, 5, 6\}$. A particularly useful example is the truth of some model $\M$, which must be either true or false: \rem{$\{\M, \alt{\M}\}$}{$\{\M, \neg{\M}\}$}.} $\{B, \neg{B}\}$. If $B$ represents the event ``It will rain tomorrow,'' then $\neg{B}$ represents the event ``It will not rain tomorrow.'' One and only one of these events must occur, so together they form a disjoint set. If $A$ represents the event ``It will rain today,'' and $\neg{A}$ represents ``It will not rain today'' (another disjoint set), then there are four possible pairs of these events, one of which must be true: $(A,B)$, $(A,\neg{B})$, $(\neg{A},B)$, and $(\neg{A},\neg{B})$. The probability of a single one of the singular events, say $B$, can be found by adding up the probabilities of all of the joint events that contain $B$ as follows:
+$${P(B) = P(A,B) + P(\neg A, B)}.$$
+In words, the probability that it rains tomorrow is the sum of two joint probabilities: (1) the probability it rains today and tomorrow, and (2) the probability it does not rain today but does rain tomorrow. 
+
+In general, if $\{A_1, A_2, \ldots, A_K\}$ is a disjoint set, the Sum Rule of Probability states:
+\begin{equation}
+\begin{array}{rcl}
+P(B) &=&P(A_1,B)+P(A_2,B)+\ldots+P(A_K,B)\\ &=&\displaystyle\sum_{k=1}^K P(A_K,B).
+\label{eq:sumrule}
+\end{array}
+\end{equation}
+That is, to find the probability of event $B$ alone you add up all the joint probabilities that involve both $B$ and one element of a disjoint set. Intuitively, it is clear that if one of $\{A_1, A_2, \ldots, A_K\}$ \emph{must} be true, then the probability that \emph{one of these and $B$} is true is equal to the base probability that $B$ is true. 
+
+\textbf{An illustration of the Product Rule of Probability} is shown by the path diagram in Figure~\ref{fig:bi0:path}. Every fork indicates the start of a disjoint set, with each of the elements of that set represented by the branches extending out. The lines indicate the probability of selecting each element from within the set. Starting from the left, one can trace this diagram to find the joint probability of, say, $A$ and $B$. At the \emph{Start} fork there is a probability of .6 of going along the top arrow to event $A$ (a similar diagram could of course be drawn that starts with $B$): The probability it rains today is .6. Then there is a probability of .667 of going along the next top fork to event $(A,B)$: The probability it rains tomorrow given it rained today is .667. Hence, of the initial .6 probability assigned to $A$, two-thirds of it forks into $(A,B)$, so the probability of $(A,B)$ is $.6 \times .667 = .40$: Given that it rained today, the probability it rains tomorrow is $.667$, so the probability it rains both today \textit{and} tomorrow is .4. The probability of any joint event at the end of a path can be found by multiplying the probabilities of all the forks it takes to get there.
+
+\textbf{An illustration of the Sum Rule of Probability} is shown in Table~\ref{tab:bi0:prob}, which tabulates the probabilities of all the joint events found through Figure~\ref{fig:bi0:path} in the main cells. For example, adding up all of the joint probabilities across the row denoted $A$ gives $P(A)$. Adding up all of the joint probabilities down the column denoted $B$ gives $P(B)$. This can also be seen by noting that in Figure~\ref{fig:bi0:path}, the probabilities of the two child forks leaving from $A$, namely $(A,B)$ and $(A,\neg B)$, add up to the probability indicated in the initial fork leading to $A$. This is true for any value of $P(B|A)$ (and $P(\neg B|A) = 1 - P(B|A)$).
+
+
+
+\begin{table*}\caption{The event $A$ is that it rains today. The event $B$ is that it rains tomorrow. Sum across rows to find $P(A)$, sum down columns to find $P(B)$. One can also divide $P(A,B)$ by $P(A)$ to find $P(B|A)$, as shown in the next section.}
+\label{tab:bi0:prob}\centering
+\begin{tabular}{cr@{ = }lr@{ = }lcr@{ = }l}
+ & \multicolumn{2}{c}{$B$} & \multicolumn{2}{c}{$\neg{B}$} & &\multicolumn{2}{c}{$B$ \textit{or} $\neg{B}$}
+ \\[0.5ex]
+\hline
+$A$ & $P(A,B)$ & $.40$ & $P(A,\neg{B})$ & $.20$ & $\Rightarrow$ & $P(A)$ & $.60$\\
+$\neg{A}$ & $P(\neg{A},B)$ & $.15$ & $P(\neg{A},\neg{B})$ & $.25$ & $\Rightarrow$ & $P(\neg A)$ & $.40$ \\[0.5ex] 
+$A$ \textit{or} $\neg A$ & $P(B)$ & $.55$ & $P(\neg B)$ & $.45$ && \multicolumn{2}{c}{$1.00$} \\[0.5ex]\hline
+\end{tabular}
+\end{table*}
+ 
+\section{What is Bayesian inference?}
+\epigraph{Together [the Sum and Product Rules] solve the problem of inference, or, better, they provide a framework for its solution.}{D.~V.~\citeA{Lindley2000}}
+
+\textbf{Bayesian inference is the application of the product and sum rules to real problems of inference}. Applications of Bayesian inference are creative ways of looking at a problem through the lens of these two rules. The rules form the basis of a mature philosophy of scientific learning {proposed} by Dorothy Wrinch and Sir Harold Jeffreys  (\citeNP{Jeffreys1961,Jeffreys1973,WrinchJeffreys1921}; see also \citeNP{LyEtAl2016}). Together, the two rules allow us to calculate probabilities and perform scientific inference in an incredible variety of circumstances. We begin by illustrating one combination of the two rules that is especially useful for scientific inference: Bayesian hypothesis testing.
+
+\subsection{Bayes' Rule}
+
+Call event $\M$ (the truth of) an hypothesis that a researcher holds and call $\neg{\M}$ a competing hypothesis. 
+Together these {can} form a disjoint set: $\{\M,\neg{\M}\}$. {The set $\{\M,\neg{\M}\}$ is necessarily disjoint if $\neg{\M}$ is simply the denial of $\M$, but in practice the set of hypotheses can contain any number of models spanning a wide range of theoretical accounts. In such a scenario, it is important to keep in mind that we cannot make inferential statements about any model not included in the set.} 
+
+Before any data are collected, the researcher has some level of prior belief in these competing hypotheses, which manifest as \textit{prior probabilities} and are denoted $P(\M)$ and $P(\neg{\M})$. The hypotheses are well-defined if they make a specific prediction about the probability of each experimental outcome $X$ through the \emph{likelihood functions} $P(X|\M)$ and $P(X|\neg\M)$. Likelihoods can be thought of as how strongly the data $X$ are implied by an hypothesis. \textit{Conditional} on the truth of an hypothesis, likelihood functions specify the probability of a given outcome and are usually easiest to interpret in relation to other hypotheses' likelihoods. Of interest, of course, is the probability that $\M$ is true, given the data $X$, or $P(\M|X)$. 
+
+By simple rearrangement of the factors of the Product Rule shown in the first line of Equation~\ref{eq:prodrule}, $P(\M,X)=P(X)P(\M|X)$, we can derive that $$P(\M|X) = \frac{P(\M,X)}{P(X)}.$$  Due to the symmetric nature of the Product Rule, we can reformulate the joint event in the numerator above by applying the product rule again as in the second line in Equation~\ref{eq:prodrule}, $P(\M,X)=P(\M)P(X|\M)$, and we see that this is equivalent to
+\begin{equation}
+P(\M|X) = \frac{P(\M)P(X|\M)}{P(X)}.
+\label{eq:bayesrule}
+\end{equation}
+Equation~\ref{eq:bayesrule} is one common formulation of \textbf{Bayes' Rule}, and analogous versions can be written for each of the other competing hypotheses; for example, Bayes' Rule for $\neg\M$ is
+$$
+P(\neg\M|X) = \frac{P(\neg\M)P(X|\neg\M)}{P(X)}.
+$$
+The probability of an hypothesis given the data is equal to the probability of the hypothesis before seeing the data, multiplied by the probability that the data occur if that hypothesis is true, divided by the prior predictive probability of the observed data (see below). In the way that $P(\M)$ and $P(\neg\M)$ are called prior probabilities because they capture our knowledge prior to seeing the data $X$, so $P(\M|X)$ and $P(\neg\M|X)$ are called the \emph{posterior probabilities}. 
+
+\subsection{The prior predictive probability $P(X)$}
+%
+Many of the quantities in Equation~\ref{eq:bayesrule} we know: we must have some prior probability (belief or prior information) that the hypothesis is true if we are even considering the hypothesis at all, and if the hypothesis is well-described it will attach a particular probability to the observed data. What remains is the denominator: the prior predictive probability $P(X)$---the probability of observing a given outcome in the experiment, which can be thought of as the average probability of the outcome implied by the hypotheses, weighted by the prior probability of each hypothesis. $P(X)$ can be obtained through the sum rule by adding the probabilities of the joint events $P(X,\M)$ and $P(X,\neg{\M})$, as in Equation~\ref{eq:sumrule}, each of which is obtained through an application of the product rule, so we obtain the following expression:
+\begin{equation}\label{eq:marginal}\begin{array}{rcl}
+P(X) &=& P(X,\M) + P(X,\neg{\M})\\ 
+&=& P(\M)P(X|\M) + P(\neg{\M})P(X|\neg{\M}),
+\end{array}\end{equation}
+which amounts to adding up the right-hand side numerator of Bayes' Rule for all competing hypotheses, giving a weighted-average probability of observing the outcome $X$. 
+
+Now that we have a way to compute $P(X)$ in Equation~\ref{eq:marginal}, we can plug the result into the denominator of Equation~\ref{eq:bayesrule} as follows: \begin{equation}\label{eq:bayesrule1}P(\M|X) = \frac{P(\M)P(X|\M)}{P(\M)P(X|\M) + P(\neg{\M})P(X|\neg{\M})}.\end{equation}
+
+Equation~\ref{eq:bayesrule1} is for the case where we are only considering one hypothesis and its complement. More generally,
+\begin{equation}
+P(\M_i|X) = \frac{P(\M_i)P(X|\M_i)}{\sum_{k=1}^K P(\M_k)P(X|\M_k)},
+\label{eq:bayesrule2}
+\end{equation}
+for the case where we are considering $K$ competing and mutually-exclusive hypotheses (i.e., hypotheses that form a disjoint set), one of which is $\M_i$. 
+
+
+\subsection{Quantifying evidence}
+
+Now that we have, in one equation, factors that correspond to our knowledge before---$P(\M)$---and after---$P(\M|X)$---seeing the data, we can address a slightly alternative question: \emph{How much did we learn due to the data $X$?} Consider that every quantity in Equation~\ref{eq:bayesrule2} is either a prior belief in an hypothesis, or the probability that the data would occur under a certain hypothesis---all known quantities. If we divide both sides of Equation~\ref{eq:bayesrule2} by $P(\M_i)$,
+\begin{eqnarray}
+\frac{P(\M_i|X)}{P(\M_i)} = \frac{P(X|\M_i)}{\sum_{k=1}^K P(\M_k)P(X|\M_k)},
+\end{eqnarray}
+we see that after observing outcome $X$, the ratio of an hypothesis's posterior probability to its prior probability is larger than 1 (i.e., its probability goes up) if {the probability it attaches to the observed outcome is greater than a weighted-average of all such probabilities -- averaged across all candidate hypotheses, using the respective prior probabilities as weights.}
+\rem{its contribution to the sum in the right-hand side denominator is greater than the weighted-average contribution from all hypotheses (where the prior probabilities again act as the weights). In other words, if an hypothesis contributes more than its fair share to the sum comprising $P(X)$ its probability increases, and vice-versa.}
+
+If we are concerned with only two hypotheses, a particularly interesting application of Bayes' Rule becomes possible. After collecting data we are left with the posterior probability of two hypotheses, $P(\M|X)$ and $P(\neg\M|X)$. If we form a ratio of these probabilities we can quantify our \emph{relative belief} in one hypothesis vis-\`a-vis the other, or what is known as the posterior odds:
+$P(\M|X)/P(\neg\M|X)$. If $P(\M|X) = .75$ and $P(\neg\M|X) = .25$, the posterior odds are $.75/.25 = 3$, or \odds{3}{1} (``three to one'') in favor of $\M$ over $\neg\M$. Since the posterior probability of an hypothesis is equal to the fraction in the right-hand side of Equation~\ref{eq:bayesrule1}, we can calculate the posterior odds as a ratio of two right-hand sides of Bayes' Rule as follows:
+$$
+\dfrac{P(\M|X)}{P(\neg\M|X)} = \dfrac{\,\,\,\dfrac{P(\M)P(X|\M)}{P(\M)P(X|\M) + P(\neg{\M})P(X|\neg{\M})}\,\,\,}{\dfrac{P(\neg\M)P(X|\neg\M)}{P(\M)P(X|\M) + P(\neg{\M})P(X|\neg{\M})}},
+$$
+which can be reduced to a simple expression (since the denominators cancel out),
+\begin{equation}
+\underbrace{\frac{P(\M|X)} {P(\neg\M|X)}}_\text{Posterior odds} =
+\underbrace{\frac{P(\M)}{P(\neg\M)}}_\text{Prior odds} \ \times \
+\underbrace{\frac{P(X|\M)}{P(X|\neg\M)}}_\text{Bayes factor}.\label{eq:bayesodds}
+\end{equation}
+The final factor---the Bayes factor---can be interpreted as \emph{the extent to which the data sway our relative belief from one hypothesis to the other}, which is determined by comparing the hypotheses' abilities to predict the observed data. If the data are more probable under $\M$ than under $\neg \M$ (i.e., if $P(X|\M)$ is larger than $P(X|\neg \M)$) then $\M$ does the better job predicting the data, and the posterior odds will favor $\M$ more strongly than the prior odds.
+
+It is important to distinguish Bayes factors from posterior probabilities. Both are useful in their own role -- posterior probabilities to determine our total belief after taking into account the data and to draw conclusions, and Bayes factors as a learning factor that tells us how much evidence the data have delivered. It is often the case that a Bayes factor favors $\M$ over $\neg\M$ while at the same time the posterior probability of $\neg\M$ remains greater than $\M$.  As Jeffreys, in his seminal paper introducing the Bayes factor as a method of inference, explains: ``If \dots  the [effect] examined is one that previous considerations make unlikely to exist, then we are entitled to ask for a greater increase of the probability before we accept it,'' and moreover, ``To raise the probability of a proposition from 0.01 to 0.1 does not make it the most likely alternative'' \cite[p.\ 221]{Jeffreys1935}. This distinction is especially relevant to today's publishing environment, where there exists an incentive to publish counterintuitive results -- whose very description as counterintuitive implies most researchers would not have expected them to be true. Consider as an extreme example \citeA{Bem2011} who presented data consistent with the hypothesis that some humans can predict future random events. While Bem's data may indeed provide positive evidence for that hypothesis \cite{RouderMorey2011}, it is staggeringly improbable a priori and the evidence in the data does not stack up to the strong priors many of us will have regarding extrasensory perception -- extraordinary claims require extraordinary evidence.
+
+Since Bayes factors quantify statistical evidence, they can serve two (closely related) purposes. First, evidence can be applied to defeat prior odds: supposing that prior to the data we believe that $\neg\M$ is three times more likely than $\M$ (i.e., the prior ratio favoring $\neg\M$ is 3, or its prior probability is 75\%), we need a Bayes factor favoring $\M$ that is greater than 3 so that $\M$ will end up the more likely hypothesis. Second, evidence can be applied to achieve a desired level of certainty: supposing that we desire a high degree of certainty before making any practical decision 
+(say, at least 95\% certainty or a posterior ratio of at least 19) and supposing the same prior ratio as before, then we would require a Bayes factor of $19 \times 3 = 57$ to defeat the prior odds and obtain this high degree of certainty. {These practical considerations (often left implicit) are formalized by utility (loss) functions in \textit{Bayesian decision theory}. We will not go into Bayesian decision theory in depth here; introductions can be found in \citeA{lindley1985} or \citeA{winkler1972book}, and an advanced introduction is available in \citeA{robert2007}.}
+\note{The inserted text above was originally a footnote.}
+
+In this section, we have derived Bayes' Rule as a necessary consequence of the laws of probability. The rule allows us to update our belief regarding an hypothesis in response to data. Our beliefs after taking account the data are captured in the \emph{posterior probability}, and the amount of updating is given by the \emph{Bayes factor}.  We now move to some applied examples that illustrate how this simple rule pertains to cases of inference. 
+
+\example{The happy herbologist} At Hogwarts School of Witchcraft and Wizardry,\footnote{With our apologies to J.\ K.\ Rowling.} professor Pomona Sprout leads the Herbology Department {(see Illustration)}. \rem{In one project, she is developing a spell to evaluate the quality of}{In the Department's greenhouses, she cultivates crops of} a magical plant called \emph{green codacle} -- a flowering plant that when consumed causes a witch or wizard to feel euphoric and relaxed. {Professor Sybill Trelawney, the professor of Divination, is an avid user of green codacle and frequently visits Professor Sprout's laboratory to sample the latest harvest.} 
+
+\rem{However, a mutation affecting one in a thousand codacle plants changes its effects and those rare plants cause unpleasant side effects, including paranoia and anxiety. Professor Sprout's new spell can}
+{However, it has turned out that one in a thousand codacle plants is afflicted with a mutation that changes its effects: Consuming those rare plants causes unpleasant side effects such as paranoia, anxiety, and spontaneous levitation. In order to evaluate the quality of her crops, Professor Sprout has developed a mutation-detecting spell. The new spell has a 99\% chance to} accurately detect an existing mutation\rem{99\% of the time}, but \rem{will} also {has a 2\% chance to} falsely indicate that a healthy plant is a mutant. \rem{2\% of the time} When {Professor} Sprout presents her results at a School colloquium, \rem{her colleague Professor} Trelawney asks two questions: What is the probability that a codacle plant is a mutant, when your spell says that it is? And what is the probability the plant is a mutant, when your spell says that it is healthy?  Trelawney's interest is in knowing how much trust to put into Professor Sprout's spell.
+
+\begin{figure*}[tb]
+\begin{center}
+\includegraphics[scale=1.2,viewport=65 288 415 415,bb=65 290 415 415]%scale=1.2,viewport=65 170 415 290,bb=65 170 415 290
+{figs/bi0_etzvandekerckhove_fig2}
+\end{center}
+\caption{The event $\M$ is that a given codacle plant is a mutant. The event $D$ is that Professor Sprout's spell returns a mutant diagnosis. A mutant diagnosis $D$ is in fact observed, so the only paths that remain relevant are those that lead to a mutant diagnosis (events $(\M,D)$ and $(\neg\M,D)$, shaded). {Professor} Trelawney takes the following steps to find the posterior probability the plant is a mutant given the mutant diagnosis: Multiply $P(\M)$ by $P(D|\M)$ to find $P(\M,D)$; multiply $P(\neg \M)$ by $P(D|\neg \M)$ to find $P(\neg \M,D)$; add $P(\M,D)$ and $P(\neg \M, D)$ to find $P(D)$; divide $P(\M,D)$ by $P(D)$ to find $P(\M|D)$. {Professor} Trelawney's question can be rephrased as: of the total probability remaining in the diagram after $D$ is observed -- which is equal to $P(D)$ -- what proportion of it originated at the $\M$ node? The results of {Professor} Trelawney's calculations are given in the text.}
+\label{fig:bi0:codacle}
+\end{figure*}
+
+Call the event that a specific plant is a mutant $\M$, and that it is healthy $\neg \M$. Call the event that Professor Sprout's spell diagnoses a plant as a mutant $D$, and that it diagnoses it healthy $\neg D$. Professor Trelawney's interest is in the probability that the plant is indeed a mutant given that it has been diagnosed as a mutant, or $P(\M|D)$, and the probability the plant is a mutant given it has been diagnosed healthy, or $P(\M|\neg D)$. Professor Trelawney, who is an accomplished statistician, has all the relevant information to apply Bayes' Rule (Equation~\ref{eq:bayesrule2} above) to find these probabilities. She knows the prior probability that a plant is a mutant is $P(\M) = .001$, and thus the prior probability that a plant is not a mutant is $P(\neg \M) = 1 - P(\M) = .999$. The probability of a correct mutant diagnosis given the plant is a mutant is $P(D|\M) = .99$, and the probability of an erroneous healthy diagnosis given the plant is a mutant is thus $P(\neg D|\M) = 1 - P(D|\M) = .01$. When the plant is healthy, the spell incorrectly diagnoses it as a mutant with probability $P(D|\neg \M) = .02$, and correctly diagnoses the plant as healthy with probability $P(\neg D|\neg \M) = 1 - P(D|\neg \M) = .98$. 
+
+When Professor Sprout's spell gives a mutant diagnosis, the posterior probability that the plant is really a mutant is given by Bayes' Rule:
+$$
+P(\M|D) = \frac{P(\M)P(D|\M)}{P(\M)P(D|\M) + P(\neg \M)P(D|\neg \M)}.
+$$
+Professor Trelawney can now consult 
+Figure~\ref{fig:bi0:codacle} to find that the posterior probability the plant is a mutant given a mutant diagnosis is:
+$$
+P(\M|D) = \frac{.001 \times .99}{.001 \times .99 + .999\times .02} \approx .047.
+$$
+A mutant diagnosis from Professor Sprout's spell raises the probability the plant is a mutant from $.001$ to roughly $.047$. This means that when a plant is diagnosed as a mutant, the posterior probability the plant is \textit{not} a mutant is $P(\neg \M|D) \approx 1 - .047 = .953$. The low prior probability that a plant is a mutant means that, even with the spell having 99\% accuracy to correctly diagnose a mutant plant as such, a plant diagnosed as a mutant is still probably safe to eat -- nevertheless, Professor Trelawney will think twice.
+
+Analogous calculations show that the posterior probability that a plant is a dangerous mutant, given it is diagnosed as healthy, is:
+$$
+P(\M|\neg D) = \frac{.001 \times .01}{.001 \times .01 + .999\times .98} \approx .000010.
+$$
+The posterior probability that a plant is a dangerous mutant despite being diagnosed as healthy is quite small, so Trelawney can be relatively confident she is eating a healthy plant after professor Sprout's spell returns a healthy diagnosis.
+
+A major advantage of using Bayes' Rule in this way is that it gracefully extends to more complex scenarios.  Consider the perhaps disappointing value of $P(\M|D)$: a mutant diagnosis only raises the posterior probability to just under 5\%.  Suppose, however, that Trelawney knows that Professor Sprout's diagnosis ($D_S$) is statistically independent from the diagnosis of her {talented} research associate Neville Longbottom ($D_L$) {-- meaning that for any given state of nature $\M$ or $\neg{\M}$, Longbottom's diagnosis does not depend on Sprout's. Further} \rem{and} suppose that both Sprout and Longbottom return the mutant diagnosis (and for simplicity we also assume Longbottom's spells are equally as accurate as Sprout's). To find the posterior probability the plant is a mutant after two independent mutant diagnoses, $P(\M|D_S, D_L)$, Trelawney can apply a fundamental principle in Bayesian inference: \textbf{Yesterday's posterior is today's prior} {\cite{Lindley2000}}. 
+
+Since we take diagnosis $D_S$ and diagnosis $D_L$ as \rem{statistically}{conditionally} independent, we know that $P(D_L|\M,D_S)=P(D_L|\M)$ and $P(D_L|\neg \M,D_S)=P(D_L|\neg \M)$, giving
+\begin{multline*}
+P(\M|D_S, D_L) \\
+= \frac{P(\M|D_S)P(D_L|\M)}{P(\M|D_S)P(D_L|\M) + P(\neg \M|D_S)P(D_L|\neg \M)} \\
+= \frac{.047 \times .99}{.047 \times .99 + .953\times .02} \approx .71,
+\end{multline*}
+where the probability the plant is a mutant \textit{prior to Longbottom's diagnosis $D_L$}, $P(\M|D_S)$, is the probability it is a mutant \textit{posterior to Sprout's diagnosis $D_S$}. This illustrates the value of multiple independent sources of evidence: a plant that has twice been independently diagnosed as a mutant is quite likely to be one. A third independent diagnosis would put the posterior probability over 99\%. {Note that, crucially, we would have obtained precisely the same final probability of $.71$ had we updated $P(\M)$ to $P(\M|D_S,D_L)$ all at once. This is easily confirmed when we consider the two diagnoses as a joint event $(D_S,D_L)$ and use the conditional probability $P(D_S,D_L|\M) = P(D_S | \M) \times P(D_L | \M)$ (as in Equation~\ref{eq:indep}) to update $P(\M)$ to $P(\M|D_S,D_L)$ in a single step.}
+
+\paragraph{Discussion} 
+It is instructive to consider some parallels of this (admittedly fictional) example to current practices in social science. The scenario is similar in setup to a null-hypothesis significance testing scenario in which one defines the null hypothesis $\mathcal{H}_0$ (e.g., that there is no effect of some manipulation) and its negation $\mathcal{H}_1$ (that there is an effect), and the end goal is to make a choice between two possible decisions $\{D,\neg D\}$; $D$ means deciding to reject $\mathcal{H}_0$, and $\neg D$ means deciding not to reject $\mathcal{H}_0$. {In the example above the} rate at which we falsely reject the null hypothesis (i.e., deciding to reject it when in fact it is true) is given by $P(D|\neg\M) = .02$ -- this is what is commonly called the false alarm rate\rem{ or \emph{significance criterion} ($\alpha$)}. The rate at which we correctly reject the null hypothesis (i.e., rejecting it if it is false) is $P(D|\M) = .99$\rem{ -- this is what is commonly called the \emph{power} of the test ($1-\beta$)}. However, even with a {low false alarm rate and a very high correct rejection rate}\rem{conservative rejection criterion and extremely high power}, a null hypothesis rejection may not necessarily provide enough evidence to overcome the low prior probability \rem{of the}{an} alternative hypothesis {might have}.
+
+\begin{figure}[bt]
+\centering
+\includegraphics[width=.5\textwidth,viewport=64 6 712 782,bb=64 6 712 782]{figs/bi0_etzvandekerckhove_illustration}
+\caption*{\textit{Illustration.} Professor Pomona Sprout is Chair of the Herbology Department at Hogwarts School of Witchcraft and Wizardry. (c) Brian Clayton, used with permission.}\label{ill:pomona}
+\end{figure}
+
+\example{A curse on your hat}\label{ex:hat}
+At the start of every school year, new Hogwarts students participate in the centuries-old Sorting ceremony, during which they are assigned to one of the four Houses of the School: Gryffindor, Hufflepuff, Ravenclaw, or Slytherin. The assignment is performed by the Sorting Hat, a pointy hat which, when placed on a student's head, analyzes their abilities and personality before loudly calling out the House that it determines as the best fit for the student. For hundreds of years the Sorting Hat has assigned students to houses with perfect accuracy and in perfect balance (one-quarter to each House).
+
+Unfortunately, the Hat was damaged by a stray curse during a violent episode at the School. As a result of the dark spell, the Hat will now occasionally blurt out ``Slytherin!'' even when the student's proper alliance is elsewhere. \rem{This year, 40\% of students landed in Slytherin instead of the usual 25\%, and each of the other Houses now get only 20\% of the students.} {Now, the Hat places exactly 40\% of first-years in Slytherin instead of the usual 25\%, and each of the other Houses get only 20\% of the cohort.}
+
+To attempt to correct the House assignment, Professor Cuthbert Binns has developed a written test---the \emph{Placement Accuracy Remedy for Students Erroneously Labeled} or P.A.R.S.E.L.\ test---on which true Slytherins will tend to score \emph{Excellent} ($S_E$), while Ravenclaws will tend to score \emph{Outstanding} ($S_O$), Gryffindors \emph{Acceptable} ($S_A$), and Hufflepuffs \emph{Poor} ($S_P$). Benchmark tests on students who were Sorted before the Hat was damaged have revealed the approximate distribution of P.A.R.S.E.L.\ scores within each House (see Table~\ref{tab:bi0:sorting}).  The test is administered to all students who are sorted into Slytherin House by the damaged Sorting Hat, and their score determines the House to which they are assigned. Headmistress Minerva McGonagall, who is a Gryffindor, asks Professor Binns to determine the probability that a student who was sorted into Slytherin and scored \emph{Excellent} on the P.A.R.S.E.L.\ test actually belongs in Gryffindor.
+
+\FPset{\pes}{0.80} \FPset{\pos}{0.10} \FPset{\pas}{0.05} \FPset{\pps}{0.05}  
+\FPset{\peg}{0.05} \FPset{\pog}{0.20} \FPset{\pag}{0.70} \FPset{\ppg}{0.05}  
+\FPset{\per}{0.05} \FPset{\por}{0.80} \FPset{\parr}{.15} \FPset{\ppr}{0.00}  
+\FPset{\peh}{0.00} \FPset{\poh}{0.10} \FPset{\pah}{0.25} \FPset{\pph}{0.65}  
+
+\FPset{\pss}{1.00} \FPset{\ps}{0.25}  
+\FPset{\psg}{0.20} \FPset{\pg}{0.25}  
+\FPset{\psr}{0.20} \FPset{\pr}{0.25}  
+\FPset{\psh}{0.20} \FPset{\ph}{0.25}  
+
+\FPeval{\jsse} {\ps*\pes*\pss}  % P(S,S,E)
+\FPeval{\jgse} {\pg*\peg*\psg}  % P(G,S,E)
+\FPeval{\jrse} {\pr*\per*\psr}  % P(R,S,E)
+\FPeval{\jhse} {\ph*\peh*\psh}  % P(H,S,E)
+\FPeval{\jsso} {\ps*\pos*\pss}  % P(S,S,O)
+\FPeval{\jgso} {\pg*\pog*\psg}  % P(G,S,O)
+\FPeval{\jrso} {\pr*\por*\psr}  % P(R,S,O)
+\FPeval{\jhso} {\ph*\poh*\psh}  % P(H,S,O)
+\FPeval{\jssa} {\ps*\pas*\pss}  % P(S,S,A)
+\FPeval{\jgsa} {\pg*\pag*\psg}  % P(G,S,A)
+\FPeval{\jrsa} {\pr*\parr*\psr} % P(R,S,A)
+\FPeval{\jhsa} {\ph*\pah*\psh}  % P(H,S,A)
+\FPeval{\jssp} {\ps*\pps*\pss}  % P(S,S,P)
+\FPeval{\jgsp} {\pg*\ppg*\psg}  % P(G,S,P)
+\FPeval{\jrsp} {\pr*\ppr*\psr}  % P(R,S,P)
+\FPeval{\jhsp} {\ph*\pph*\psh}  % P(H,S,P)
+
+\FPeval{\pse} {\jsse + \jgse + \jrse + \jhse}  % P(S,E)
+\FPeval{\pso} {\jsso + \jgso + \jrso + \jhso}  % P(S,O)
+\FPeval{\psa} {\jssa + \jgsa + \jrsa + \jhsa}  % P(S,A)
+\FPeval{\psp} {\jssp + \jgsp + \jrsp + \jhsp}  % P(S,P)
+
+\FPeval{\psse} {\jsse/\pse} \FPeval{\pssepct}{100*\psse} % P(S|S,E)
+\FPeval{\pgse} {\jgse/\pse} \FPeval{\pgsepct}{100*\pgse} % P(G|S,E)
+\FPeval{\prse} {\jrse/\pse} \FPeval{\prsepct}{100*\prse} % P(R|S,E)
+\FPeval{\phse} {\jhse/\pse} \FPeval{\phsepct}{100*\phse} % P(H|S,E)
+\FPeval{\psso} {\jsso/\pso} \FPeval{\pssopct}{100*\psso} % P(S|S,O)
+\FPeval{\pgso} {\jgso/\pso} \FPeval{\pgsopct}{100*\pgso} % P(G|S,O)
+\FPeval{\prso} {\jrso/\pso} \FPeval{\prsopct}{100*\prso} % P(R|S,O)
+\FPeval{\phso} {\jhso/\pso} \FPeval{\phsopct}{100*\phso} % P(H|S,O)
+\FPeval{\pssa} {\jssa/\psa} \FPeval{\pssapct}{100*\pssa} % P(S|S,A)
+\FPeval{\pgsa} {\jgsa/\psa} \FPeval{\pgsapct}{100*\pgsa} % P(G|S,A)
+\FPeval{\prsa} {\jrsa/\psa} \FPeval{\prsapct}{100*\prsa} % P(R|S,A)
+\FPeval{\phsa} {\jhsa/\psa} \FPeval{\phsapct}{100*\phsa} % P(H|S,A)
+\FPeval{\pssp} {\jssp/\psp} \FPeval{\pssppct}{100*\pssp} % P(S|S,P)
+\FPeval{\pgsp} {\jgsp/\psp} \FPeval{\pgsppct}{100*\pgsp} % P(G|S,P)
+\FPeval{\prsp} {\jrsp/\psp} \FPeval{\prsppct}{100*\prsp} % P(R|S,P)
+\FPeval{\phsp} {\jhsp/\psp} \FPeval{\phsppct}{100*\phsp} % P(H|S,P)
+
+\begin{table*}[th]
+\caption{Probability of each P.A.R.S.E.L.\ score by true House affiliation. {Each value indicates the conditional probability $P(S|\M)$, that is, the probability that a student from house $\M$ obtains score $S$.}}
+\centering
+\begin{tabular}{lccccc}
+              & Excellent ($S_E$) & Outstanding ($S_O$) & Acceptable ($S_A$) & Poor ($S_P$) \\ \hline
+Slytherin  ($\M_S$)&\print[2]{\pes}&\print[2]{\pos}&\print[2]{\pas}&\print[2]{\pps}\\
+Gryffindor ($\M_G$)&\print[2]{\peg}&\print[2]{\pog}&\print[2]{\pag}&\print[2]{\ppg}\\
+Ravenclaw  ($\M_R$)&\print[2]{\per}&\print[2]{\por}&\print[2]{\parr}&\print[2]{\ppr}\\
+Hufflepuff ($\M_H$)&\print[2]{\peh}&\print[2]{\poh}&\print[2]{\pah}&\print[2]{\pph}\\
+ \hline
+\end{tabular}\label{tab:bi0:sorting}
+\end{table*}
+
+The solution relies on the repeated and judicious application of the Sum and Product Rules, until an expression appears with the desired quantity on the left hand side and only known quantities on the right hand side. To begin, Professor Binns writes down Bayes' Rule (remembering that a joint event like $(D_S, S_E)$ can be treated like any other event):
+$$P(\M_G|D_S,S_E) = \frac{P(\M_G)P(D_S,S_E|\M_G)}{P(D_S,S_E)}$$
+Here, $\M_G$ means that the true House assignment is Gryffindor, $D_S$ means that the Sorting Hat placed them in Slytherin, and $S_E$ means the student scored \emph{Excellent} on the P.A.R.S.E.L.\ test. 
+
+In most simple cases, we often have knowledge of simple probabilities, of the form $P(A)$ and $P(B|A)$, while the probabilities of joint events $(A,B)$ are harder to obtain. For Professor Binns' problem, we can overcome this difficulty by using the Product Rule to unpack the joint event in the numerator:\footnote{Note that this is an application of the Product Rule to the scenario where both events are conditional on $\M_G$: $P(D_S,S_E|\M_G) = P(S_E|\M_G)P(D_S|S_E,\M_G)$.}
+$$P(\M_G|D_S,S_E) = \frac{P(\M_G)P(S_E|\M_G)P(D_S|S_E,\M_G)}{P(D_S,S_E)}.$$
+Now we discover the probability $P(D_S|S_E,\M_G)$ in the numerator.  Since {the cursed hat's recommendation does not add any information about the P.A.R.S.E.L.\ score above and beyond the student's true House affiliation (i.e., it is \emph{conditionally independent}; the test score is not entirely independent of the hat's recommendation since the hat is often right about the student's correct affiliation and the affiliation influences the test score)}\rem{ a student's score on the P.A.R.S.E.L. depends on their House but not on anything the Sorting Hat says}, we can simplify this conditional probability: $P(D_S|S_E,\M_G) = P(D_S|\M_G)$. Note that the numerator now only contains known quantities: $P(S_E|\M_G)$ can be read off as 0.05 from Table~\ref{tab:bi0:sorting}; $P(D_S|\M_G)$ is the probability that a true Gryffindor is erroneously sorted into Slytherin, and since that happens to one in five true Gryffindors (because the proportion sorted into Gryffindor went down from 25\% to 20\%), $P(D_S|\M_G)$ must be 0.20; and $P(\M_G)$ is the base probability that a student is a Gryffindor, which we know to be one in four. Thus,
+\begin{eqnarray*}
+P(\M_G|D_S,S_E) &=& \frac{P(\M_G)P(S_E|\M_G)P(D_S|\M_G)}{P(D_S,S_E)} \\  
+& = & \frac{\print[2]{\pg} \times \print[2]{\peg} \times \print[2]{\psg}}{P(D_S,S_E)}.
+\end{eqnarray*}
+
+This leaves us having to find $P(D_S,S_E)$, the prior predictive probability that a student would be Sorted into Slytherin and score \emph{Excellent} on the P.A.R.S.E.L.\ test. Here, the Sum Rule will help us out, because we can find the right hand side numerator for each type of student in the same way we did for true Gryffindors above -- we can find $P(D_S,S_E|\M_i)$ for any House $i = S, G, R, H$. Hence (from Equation~\ref{eq:sumrule}), 
+\begin{eqnarray*}
+P(D_S,S_E)  &=& \sum_i P(\M_i)P(S_E|\M_i)P(D_S|\M_i) \\
+ &=&    P(\M_S)P(S_E|\M_S)P(D_S|\M_S) \\
+ && {}+ P(\M_G)P(S_E|\M_G)P(D_S|\M_G)\\
+ && {}+ P(\M_R)P(S_E|\M_R)P(D_S|\M_R) \\ 
+ && {}+ P(\M_H)P(S_E|\M_H)P(D_S|\M_H)\\
+&=&    \print[2]{\ps} \times \print[2]{\pes} \times \print[2]{\pss} \\
+&& {}+ \print[2]{\pg} \times \print[2]{\peg} \times \print[2]{\psg} \\
+&& {}+ \print[2]{\pr} \times \print[2]{\per} \times \print[2]{\psr} \\
+&& {}+ \print[2]{\ph} \times \print[2]{\peh} \times \print[2]{\psh} \\
+ &=& \print{\pse}.
+\end{eqnarray*}
+So finally, we arrive at:
+$$P(\M_G|D_S,S_E) = \frac{\print{\jgse}}{\print{\pse}} = \print{\pgse},$$
+which allows Professor Binns to return to the Headmistress with good news: There is only around a \print[0]{\pgsepct}\% probability that a student who is Sorted into Slytherin and scores \emph{Excellent} on the P.A.R.S.E.L.\ test is actually a Gryffindor. Binns further claims that the probability that such a student is a true Slytherin is over 95\%, and that the combined procedure{---that consists of first letting the Sorting Hat judge and then giving Slytherin-placed students a P.A.R.S.E.L.\ test and rehousing them by their score---}will correctly place students of any House with  \rem{more than 50\%}{at least 90\%} probability.\rem{In fact, only one of these two claims is true, but it is left to the reader to identify which one}
+\FPeval{\pssepctt}{100}%
+\FPeval{\pgsapctt}{80+20*\pag}%
+\FPeval{\prsopctt}{80+20*\por}%
+\FPeval{\phsppctt}{80+20*\pph}%
+\FPeval{\prsot}{.80+.2*\por}%
+{For example, he explains, a true Ravenclaw would be sorted into their correct House by the Hat with 80\% ($P(D_R|\M_R)$) probability, and would be placed into Slytherin with 20\% probability. In the second case, the student would be given the P.A.R.S.E.L.\ test, in which they would obtain an \emph{Outstanding} with 80\% ($P(S_O|\M_R)$) probability. Hence, they would be placed in their correct House with probability $P(D_R|\M_R) + P(D_S|\M_R) \times P(S_O|\M_R) = 0.80 + 0.20 \times \print[2]{\por} = \print[2]{\prsot}$.}
+
+\paragraph{Discussion} The \rem{second} {Sorting Hat} example introduces two extensions from the first. Here, there are not two but four possible ``models'' -- whereas statistical inference is often seen as a choice problem between two alternatives, probabilistic inference naturally extends to any number of alternative hypotheses. The extension that allows for the evaluation of multiple hypotheses did not require the ad hoc formulation of any new rules, but relied entirely on the same basic rules of probability. 
+
+\rem{Additionally,} The example {additionally} underscores an inferential facility that we believe is vastly underused in social science: we selected between models making use of two \emph{\rem{entirely independent and} qualitatively different} sources of information. The two sources of information were individually insufficient but jointly powerful{: the Hat placement is only 80\% accurate in most cases, and the written test was only 50\% accurate for the Ravenclaw case, but together they are 90\% accurate}.
+Again, this extension is novel only in that we had not yet considered it -- \rem{no new mathematical facts are required and it is merely a consequence of the two fundamental rules of probability} {the fact} that information from multiple sources can be so combined {requires no new facts and is merely a consequence of the two fundamental rules of probability}.
+
+\section{Probability theory in the continuous case}
+\epigraph{{In Bayesian parameter estimation, both the prior and posterior distributions represent, not any measurable property of the parameter, but only our own state of knowledge about it. The width of the [posterior] distribution\dots indicates the range of values that are consistent with our prior information and data, and which honesty therefore compels us to admit as possible values.}}{E.~T.~\citeA{Jaynes1986}}
+
+The full power of probabilistic inference will come to light when we generalize from discrete events $A$ with probabilities $P(A)$, to continuous parameters $a$ with probability densities $p(a)$.\footnote{When we say a parameter is ``continuous'' we mean it could take any one of the infinite number of values comprising some continuum. For example, this would apply to values that follow a normal distribution.}  
+Probability densities are different from probabilities in many ways. Densities express how much probability exists ``near'' a particular value of $a$, while the probability of any particular value of $a$ in a continuous range is zero. 
+Probability densities cannot be negative but they can be larger than 1, and they translate to probabilities through the mathematical operation of integration (i.e., calculating the area under a function over a certain interval). Possibly the most well-known distribution in psychology is the theoretical distribution of IQ in the population, which is shown in Figure~\ref{fig:bi0:densexample}.
+
+\begin{figure}[tb]
+\centering
+\includegraphics[scale=1%,viewport=178 311 410 473,bb=178 311 410 473
+]
+{figs/bi0_etzvandekerckhove_fig3} \\[1ex]
+\caption{An example of a probability density function (PDF). PDFs express the relative plausibility of different values and can be used to determine the probability that a value lies in any interval. The PDF shown here is the theoretical distribution of IQ in the population: a normal distribution (a.k.a.\ Gaussian distribution) with mean 100 and standard deviation 15. In this distribution, the filled region to the left of 81 has an area of approximately 0.10, indicating that for a random member of the population, there is a 10\% chance their IQ is below 81. Similarly, the narrow shaded region on the right extends from 108 to 113 and also has an area of 0.10, meaning that a random member has a 10\% probability of falling in that region.}
+\label{fig:bi0:densexample}
+\end{figure}
+
+By definition, the total area under a probability density function is 1:$$1 = \int_A p(a)da,$$ where capitalized $A$ indicates that the integration is over the entire range of possible values for the parameter that appears at the end -- in this case $a$. The range $A$ is hence a disjoint set of possible values for $a$. For instance, if $a$ is the mean of a normal distribution, $A$ indicates the range of real numbers from $-\infty$ to $\infty$; if $a$ is the rate parameter for a binomial distribution, $A$ indicates the range of real numbers between $0$ and $1$. The symbol $da$ is called the \emph{differential} and the function that appears between the integration sign and the differential is called the \emph{integrand} -- in this case $p(a)$.
+
+We can consider how much probability is contained within smaller sets of values within the range $A$; for example, we could consider the integral over only the \rem{negative }values of $a$ {that are less than 81}\rem{ (e.g., for the mean of a normal distribution)}, which would equal the probability that $a$ is \rem{negative}{less than 81}:\footnote{Strictly speaking, this integral is the probability that $a$ is \rem{negative \emph{or zero}}{less than \emph{or equal to} 81}, but the probability of any single point in a continuous distribution is 0. By the sum rule, $P(a \leq 81) = P(a < 81) + P(a = 81)$, which simplifies to $P(a \leq 81) = P(a < 81) + 0$.}$$P(a < 81) = \int_{-\infty}^{81} p(a)da.$$ {In Figure~\ref{fig:bi0:densexample}, the shaded area on the left indicates the probability density over the region $(-\infty, 81)$.}
+
+The fundamental rules of probability theory in the discrete case---the sum and product rules---have continuous analogues. The continuous form of the product rule is essentially the same as in the discrete case: $p(a,b) = p(a)p(b|a)$, where $p(a)$ is the density of the continuous parameter $a$ and $p(b|a)$ denotes the \textit{conditional density} of $b$ (i.e., the density of $b$ assuming a particular value of $a$). As in the discrete case of Equation~\ref{eq:prodrule}, it is true that $p(a,b) = p(a)p(b|a) = p(b)p(a|b)$, and that $p(a,b)=p(a)p(b)$ if we consider $a$ and $b$ to be statistically independent. For the continuous sum rule, the summation in Equation~\ref{eq:sumrule} is replaced by an integration over the entire parameter space $B$: $$p(a) = \int_B p(a,b)db.$$ Because this operation can be visualized as a function over two dimensions ($p(a,b)$ is a function that varies over $a$ and $b$ simultaneously) that is being collapsed into the one-dimensional margin ($p(a)$ varies only over $a$), this operation is alternatively called \emph{marginalization}, \emph{integrating over $b$}, or \emph{integrating out $b$}.
+
+Using these continuous forms of the sum and product rules, we can derive a continuous form of Bayes' Rule by successively applying the continuous sum and product rules to the numerator and denominator (analogously to Equation~\ref{eq:bayesrule2}):
+\begin{equation}
+\begin{array}{rcl}
+p(a|b) &=& \dfrac{p(a,b)}{p(b)} = \dfrac{p(a)p(b|a)}{p(b)}\\[3ex]
+&=& \dfrac{p(a)p(b|a)}{\int_A p(a)p(b|a)da}.
+\end{array}
+\label{eq:bayesrule3}
+\end{equation}
+{Since the product in the numerator is divided by its own integral, the total area under the posterior distribution always equals 1; this guarantees that the posterior is always a proper distribution if the prior and likelihood are proper distributions.}
+\note{The inserted text above was originally a footnote.}
+
+ One application of Bayesian methods to continuous parameters is \emph{estimation}.  If $\theta$ (theta) is a parameter of interest (say, the success probability of a participant in a task), then information about the relative plausibility of different values of $\theta$ is given by the probability density $p(\theta)$. If new information becomes available, for example in the form of new data $x$, the density can be %
+ updated and %
+ made conditional on $x$: It should be noted that by ``continuous form of Bayes' Rule'' we mean that the prior and posterior distributions for the model parameter(s) are continuous -- the sample data can still be discrete, as in Example~{\ref{ex:vomit}} below.
+ \begin{equation}
+\begin{array}{rcl}
+p(\theta|x) = \dfrac{p(\theta)p(x|\theta)}{p(x)} = \dfrac{p(\theta)p(x|\theta)}{\int_\Theta p(\theta)p(x|\theta)d\theta} .
+\end{array}
+\label{eq:bayesrule4}
+\end{equation}
+
+Since in the context of scientific learning these two densities typically represent our knowledge of a parameter $\theta$ before and after taking into account the new data $x$, $p(\theta)$ is often called the \emph{prior density} and $p(\theta|x)$ the \emph{posterior density}.  Obtaining the posterior density involves the evaluation of Equation~\ref{eq:bayesrule4} and requires one to define a likelihood function $p(x|\theta)$, which indicates how strongly the data $x$ are implied by every possible value of the parameter $\theta$. \rem{Note that the data $x$ can be discrete or continuous.}{It should be noted that by ``continuous form of Bayes' Rule'' we mean that the prior and posterior distributions for the model parameter(s) are continuous -- the sample data can still be discrete, as in Example~{\ref{ex:vomit}} below.}
+
+The numerator on the right hand side of Equation~\ref{eq:bayesrule4}, $p(\theta)p(x|\theta)$,  is a product of the prior distribution and the likelihood function, and it completely determines the shape of the posterior distribution (note that the denominator in that equation is not a function of the parameter $\theta$; even though the parameter seems to feature in the integrand, it is in fact ``integrated out'' so that the denominator depends only on the data $x$). For this reason, many authors prefer to ignore the denominator of Equation~\ref{eq:bayesrule4} and simply write the posterior density as proportional to the numerator, as in $p(\theta|x)\propto p(\theta)p(x|\theta)$. We do not, because this conceals the critical role the denominator plays in a predictive interpretation of Bayesian inference.
+
+The denominator $p(x)$ is the weighted-average probability of the data $x$, where the form of the prior distribution determines the weights. This normalizing constant is the continuous analogue of the prior predictive distribution, often alternatively referred to as the \textit{marginal likelihood} or the Bayesian \textit{evidence}.\footnote{We particularly like Evans's take on %
+the term %
+Bayesian \textit{evidence}: ``For evidence, as expressed by observed data in statistical problems, is what causes beliefs to change and so we can measure evidence by measuring change in belief'' \cite[p.\ 243]{evans2014}.}  Consider that, in a similar fashion to the discrete case, we can rearrange Equation~\ref{eq:bayesrule4} as follows---dividing each side by $p(\theta)$---to illuminate in an alternative way how Bayes' rule operates in updating the prior distribution $p(\theta)$ to a posterior distribution $p(\theta|x)$:
+\begin{equation}\label{eq:savdic}
+\dfrac{p(\theta|x)}{p(\theta)} = \dfrac{p(x|\theta)}{p(x)} = \dfrac{p(x|\theta)}{\int_\Theta p(\theta)p(x|\theta)d\theta}.
+\end{equation}
+On the left hand side, we see the ratio of the posterior to the prior density. Effectively, this tells us for each value of $\theta$ how much more or less plausible that value became due to seeing the data $x$. The equation shows that this ratio is determined by how well that specific value of $\theta$ predicted the data, in comparison to the weighted-average predictive accuracy across all values in the range $\Theta$. In other words, \textbf{parameter values that exceed the average predictive accuracy across all values in $\Theta$ have their densities increased, while parameter values that predict worse than the average have their densities decreased} \cite<see>{moreyetalinpressprediction,WagenmakersEtAl2016benefits}. 
+
+While the discrete form of Bayes' rule has natural applications in hypothesis testing, the continuous form more naturally lends itself to parameter estimation.  
+Examples of such questions are: ``What is the probability that the regression weight $\beta$ is positive?''\ and ``What is the probability that the difference between these means is between $\delta=-.3$ and $\delta=.3$?'' These questions can be addressed in a straightforward way, using only the product and sum rules of probability.
+
+\example{Perfection of the puking pastille}\label{ex:vomit}
+In the secretive research and development laboratory of \textit{Weasley's Wizarding Wheezes},  George Weasley works to develop gag toys and prank foods for the entertainment of young witches and wizards.  In a recent project, Weasley is studying the effects of his store's famous \emph{puking pastilles}, which cause immediate vomiting when consumed.  The target audience is Hogwarts students who need an excuse to leave class and enjoy making terrible messes.
+
+Shortly after the pastilles hit Weasley's store shelves, customers began to report that puking pastilles cause not one, but multiple ``expulsion events.''  To learn more about this unknown behavior, George turns to his sister Ginny and together they decide to set up an exploratory study.  From scattered customer reports, George believes the expulsion rate to be between three to five events per hour, but he intends to collect data to determine the rate more precisely.  At the start of this project, George has no distinct hypotheses to compare -- he is interested only in estimating the expulsion rate.
+
+Since the data $x$ are counts of the number of expulsion events within an interval of time, Ginny decides that the appropriate model for the data (i.e., likelihood function) is a Poisson distribution {(see top panel of Figure~\ref{fig:bi0:poisson})}:
+\begin{equation}\label{eq:poisson}
+p(x|\rate) = \frac{1}{x!} \exp\left(-\rate\right) \rate^x,
+\end{equation}
+with the $\rate$ (lambda) parameter representing the expected number of events within the time interval (note $\exp(-\lambda)$ is simply a clearer way to write $e^{-\lambda}$). 
+
+{A} useful prior distribution for Poisson rates is the Gamma distribution {\cite[Appendix~A]{GelmanEtAl2004}}:\footnote{Recall that $x!=x\times (x-1) \times \dots\times 1$ (where $x!$ is read as ``the factorial of $x$,'' or simply ``$x$ factorial''). Similarly, the Gamma function $\Gamma(\shape)$ is equal to $(\shape-1)!=(\shape-1)\times(\shape-2)\times\dots\times 1$ when $\shape$ is an integer. Unlike a factorial, however, the Gamma function is more flexible in that it can be applied to non-integers.}
+\begin{equation}\label{eq:gamma}
+p(\rate|\shape,\scale) = \frac{\scale^\shape}{\Gamma(\shape)} \exp\left(-\rate \scale\right) \rate^{\shape + 1},
+\end{equation}
+A visual representation of \rem{that} {the Gamma} distribution is given in the \rem{top row}{second panel} of Figure~\ref{fig:bi0:poisson}. {A Gamma distribution has two parameters that determine its form, namely shape ($\shape$) and scale ($\scale$).\footnote{To ease readability we use Greek letters for the parameters of a likelihood function and Roman letters for the parameters of prior (posterior) distributions. The parameters that characterize a distribution can be found on the right side of the conditional bar; for instance, the likelihood function $p(x|\rate)$ has parameter $\rate$, whereas the prior distribution $p(\rate|\shape,\scale)$ has parameters $(\shape,\scale)$.} 
+}
+The Gamma distribution is useful here for two reasons: first, it has the right \emph{support}, meaning that it provides nonzero density for all possible values for the rate (in this case all positive real numbers); and second, it is \emph{conjugate} with the Poisson distribution, a technical property to be explained below.
+
+Before collecting further data, the Weasleys make sure to specify what they believe to be reasonable values based on the reports George has heard.  
+In {the second panel of} Figure~\ref{fig:bi0:poisson}, Ginny set the prior parameters to $\shape = 2$ and $\scale = 0.2$ by drawing the shape of the distribution for many parameter combinations and selecting a curve that closely resembles George's prior information: Values between three and five are most likely, but the true value of the expulsion rate could conceivably be much higher.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[scale=1%,viewport=126 209 483 582,bb=126 209 483 582
+]{figs/bi0_etzvandekerckhove_fig4}\vspace{2ex}
+\caption{Progress of the Weasley's knowledge of the expulsion rate $\rate$ (the expected number of expulsion events per hour). {\textbf{Top row:} An example Poisson distribution. The function is  $p(x|\lambda=7)$ as defined in Equation~\ref{eq:poisson}. The height of each bar indicates the probability of that particular outcome (e.g., number of expulsion events).} \textbf{Second row:} The prior distribution of $\rate$; a Gamma distribution with parameters $\shape=2$ and $\scale=0.2$. \textbf{Third row:} The likelihood functions associated with $x_1=7$ (left), $x_2=8$ (center), and $x_3=19$ (right). \textbf{Bottom row:} The posterior distribution of $\rate$; a Gamma distribution with parameters $\shape=36$ and $\scale=3.2$.}
+\label{fig:bi0:poisson}
+\end{figure}
+
+Three volunteers are easily found, administered one puking pastille each, and monitored for one hour. The observed event frequencies are $x_1=7$, $x_2=8$, and $x_3=19$.
+
+With the prior density (Eq.~\ref{eq:gamma}) and the likelihood (Eq.~\ref{eq:poisson}) known, Ginny can use Bayes' rule as in Equation~\ref{eq:bayesrule3} to derive the posterior distribution of $\lambda$, conditional on the new data points $X_n = (x_1, x_2, x_3)$. She will assume the $n=3$ data points are independent given $\lambda$, so that  their likelihoods may be multiplied.\footnote{The likelihood function of the combined data is ${p(X_n|\lambda) =p(x_1|\lambda)\times p(x_2|\lambda)\times p(x_3|\lambda)}$, which we write using the product notation, $ \prod_{i=1}^{n=3}p(x_i|\lambda)$, in the following equations to save space. Similarly, $\prod_1^3 \exp\left(-\rate\right) \rate^{x_i}={\exp(-3\lambda)\lambda^{(x_1+x_2+x_3)}}$.} This leaves her with the following expression for the posterior density of $(\rate|X_n,\shape,\scale)$  :\begin{eqnarray}p(\rate|X_n,\shape,\scale) =
+\frac{ \frac{\scale^\shape}{\Gamma(\shape)} \exp\left(-\rate \scale\right) \rate^{\shape + 1} \times \prod_{i=1}^{n=3} \frac{1}{x_i!} \exp\left(-\rate\right) \rate^{x_i} } { \int_\Lambda \frac{\scale^\shape}{\Gamma(\shape)} \exp\left(-\rate \scale\right) \rate^{\shape + 1} \times \prod_{i=1}^{n=3} \frac{1}{x_i!} \exp\left(-\lambda\right) \rate^{x_i} d\rate }.\end{eqnarray}
+
+This expression may look daunting, but Ginny Weasley is not easily intimidated. She goes through the following algebraic steps to simplify the expression: (1) collect all factors that do not depend on $\rate$ (which, notably, includes the entire denominator) and call them $Q(X_n)$, and (2) combine exponents with like bases:
+\begin{eqnarray*}
+p(\rate|X_n,\shape,\scale) &=& Q(X_n) \exp\left(-\rate \scale\right) \rate^{\shape + 1} \times \prod_{i=1}^{n=3} \exp\left(-\rate\right) \rate^{x_i} \\
+&=& Q(X_n) \exp\left[-\rate(\scale + n)\right] \rate^{\left(\shape + \sum_{i=1}^{n=3} x_i\right) + 1}.
+\end{eqnarray*}
+
+Note the most magical result that is obtained here! Comparing the last equation to Equation~\ref{eq:gamma}, it turns out that these have \emph{exactly the same form}.  Renaming $(\scale+n)$ to $\hat\scale$ and $\left(\shape + \sum_i^n x_i\right)$ to $\hat\shape$ makes this \rem{most}{especially} clear:
+$$p(\rate|X_n,\shape,\scale) = \frac{\hat\scale^{\hat\shape}}{\Gamma\left(\hat\shape\right)} \exp\left(-\rate\hat\scale\right) \rate^{\hat\shape + 1} = p(\rate|\hat\shape,\hat\scale).$$
+\noindent Here, Ginny has completed the distribution by replacing the scaling constant $Q(X_n)$ with the scaling constant of the Gamma distribution -- after all, we know that the outcome must be a {probability density}\rem{distribution}, and each \rem{distribution}{density} has a unique scaling constant that ensures the total area under it is 1.
+
+The posterior distribution $p(\rate|X_n, \shape, \scale)$ thus turns out to be equal to the prior distribution with updated parameters $\hat\scale = \scale + n$ and $\hat\shape = \shape + \sum_i^n x_i$.  Differently put, \begin{equation}p(\rate|X_n,\shape,\scale) = p\left(\rate\mid\shape + \sum_i^n x_i, \scale + n\right).\label{eq:gammapost}\end{equation} This amazing property, where the prior and posterior distributions have the same form, results from the special relationship between the Gamma distribution and the Poisson distribution: \emph{conjugacy}. The bottom panel of Figure~\ref{fig:bi0:poisson} shows the much more concentrated posterior density for $\lambda$: a Gamma distribution with parameters $\hat\shape = 36$ and $\hat\scale = 3.2$. 
+
+When priors and likelihoods are conjugate, three main advantages follow. First, it is easy to express the posterior density because it has the same form as the prior density (as seen in Equation~\ref{eq:gammapost}). Second, it is straightforward to calculate means and other summary statistics of the posterior density. For example, the mean of a Gamma distribution has a simple formula: $\shape/\scale$. Thus, George and Ginny's prior density for $\rate$ has a mean of $\shape/\scale=2/.2=10$, and their posterior density for $\rate$ has a mean of $\hat\shape/\hat\scale = 36/3.2 = 11.25$. The prior and posterior densities' respective modes are $(\shape-1)/\scale=5$ and $(\hat\shape-1)/\hat\scale = 35/3.2 \approx 11$, as can be seen from Figure~\ref{fig:bi0:poisson}. Third, it is straightforward to  update the posterior distribution sequentially as more data become available.
+
+\paragraph{Discussion}  Social scientists estimate model parameters in a wide variety of settings. Indeed, a focus on estimation is the core of the \emph{New Statistics} \cite{Cumming2014}. The \emph{puking pastilles} example illustrates how Bayesian parameter estimation is a direct consequence of the rules of probability theory, and this relationship licenses a number of interpretations that the \emph{New Statistics} does not allow.  Specifically, the basis in probability theory allows George and Ginny to (1) point at the most plausible values for the rate of expulsion events and (2) provide an interval that contains the expulsion rate with a certain probability (e.g., a Gamma distribution calculator shows that $\lambda$ is between 8.3 and 14.5 with 90\% probability). 
+
+The applications of parameter estimation often involve exploratory settings: no theories are being tested and a distributional model of the data is assumed for descriptive convenience.  Nevertheless, parameter estimation can be used to adjudicate between theories under certain special circumstances: if a theory or hypothesis makes a particular prediction about a parameter's value or range, then estimation can take a dual role of hypothesis testing. In the social sciences most measurements have a natural reference point of zero, so this type of hypothesis will usually be in the form of a directional prediction for an effect. In our example, suppose that George was specifically interested in whether $\lambda$ was less than 10.  Under his prior distribution for $\lambda$, the probability of that being the case was 59.4\%.  After seeing the data, the probability $\lambda$ is less than 10 decreased to 26.2\%.
+
+\note{The following section is moved here. It was originally part of the text of the next example.}
+
+\subsection{Estimating the mean of a normal distribution}
+By far the most common distribution used in statistical testing in social science, the normal distribution deserves discussion of its own. The normal distribution has a number of interesting properties---some of them rather unique---but we discuss it here because it is a particularly appropriate choice for modeling unconstrained, continuous data.  The mathematical form of the normal distribution is
+\begin{eqnarray*}
+p(x|\mu,\sigma) &=& N(x|\mu,\sigma^2) \\
+&=&\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2\right],
+\end{eqnarray*}
+with the $\mu$ (mu) parameter representing the average (\textit{mean}) of the population from which we are sampling and $\sigma$ (sigma) the amount of dispersion (\textit{standard deviation}) in the population. We will follow the convention that the normal distribution is parameterized with the \textit{variance} $\sigma^2$. An example normal distribution is drawn in Figure~\ref{fig:bi0:densexample}.
+
+One property that makes the normal distribution useful is that it is \emph{self-conjugate}: The combination of a normal prior density and normal likelihood function is itself a normal distribution, which greatly simplifies the derivation of posterior densities. Using Equation~\ref{eq:bayesrule3}, and given some data set $X_n=(x_1,x_2,...,x_{n})$, we can derive the following expression for the posterior density $(\mu|X_n,a,b)$:
+$$p(\mu|X_n,a,b) = \dfrac{N(\mu|a,b^2)\times\prod_i^n N(x_i|\mu,\sigma^2)}{\int_{M}N(\mu|a,b^2)\times\prod_i^n N(x_i|\mu,\sigma^2)d\mu}$$
+Knowing that the product of normal distributions is also a normal distribution (up to a scaling factor), it is only a matter of tedious algebra to derive the posterior distribution of $\mu$. We do not reproduce the algebraic steps here -- the detailed derivation can be found in \cite{GelmanEtAl2004}, among many other places. The posterior is
+$$p(\mu|X_n,a,b) = N\left(\mu|\hat{a},\hat{b}^2\right),$$
+where 
+$$\hat{b}^2 = {\frac{1}{\frac{n}{\sigma^2}+\frac{1}{b^2}}}$$
+and 
+\begin{eqnarray*}
+\hat{a} &=& \left( \frac{\hat{b}^2}{b^2}\right)a
+           +\left( \frac{\hat{b}^2}{\sigma^2/n} \right) \bar x\\[1ex]
+        &=& \W a + \left(1-\W\right)\bar x,
+\end{eqnarray*}
+where $\bar{x}$ refers to the mean of the sample.
+
+Carefully inspecting these equations can be instructive. To find $\hat{b}$, the standard deviation (i.e., spread) of the posterior distribution of $\mu$, we must compare the spread of the prior distribution, $b$, to the \emph{standard error of the sample}, $\sigma/\sqrt{n}$. The formula for $\hat{b}$ represents how our uncertainty about the value of $\mu$ is reduced due to the information gained in the sample. If the sample is noisy, such that the standard error of the sample is large compared to the spread of the prior, then relatively little is learned from the data compared to what we already knew before, so the difference between $\hat{b}$ and $b$ will be small. Conversely, if the data are relatively precise, such that the standard error of the sample is small when compared to the spread of the prior, then much will be learned about $\mu$ from the data and $\hat{b}$ will be much smaller than $b$. 
+
+To find $\hat{a}$, the mean of the posterior distribution for $\mu$, we need to compute a weighted average of the prior mean and the sample mean. In the formula above, the weights attached to $a$ and $\bar x$ sum to 1 and are determined by how much each component contributes to the total precision of the posterior distribution. Naturally, the best guess for the value of $\mu$ splits the difference between what we knew of $\mu$ before seeing the sample and the estimate of $\mu$ obtained from the sample; whether the posterior mean is closer to the prior mean or the sample mean depends on a comparison of their relative precision. If the data are noisy compared to the prior (i.e., the difference between prior variance $b^2$ and posterior variance $\hat{b}^2$ is small, meaning $\W$ is near 1), then the posterior mean will stay relatively close to the prior mean. If the data are relatively precise (i.e., $\W$ is near zero), the posterior mean will move to be closer to the sample mean. If the precision of the prior and the precision of the data are approximately equal then $\W$ will be near $1/2$, so the posterior mean for $\mu$ will fall halfway between $a$ and $\bar x$. 
+
+{The above effect is often known as \textit{shrinkage} because our sample estimates are pulled back toward prior estimates (i.e., shrunk). Shrinkage is generally a desirable effect, in that it will lead to more accurate parameter estimates and empirical predictions \cite<see>{EfronMorris1977}. Since Bayesian estimates are automatically shrunk according to the relative precision of the prior and the data, incorporating prior information simultaneously improves our parameter estimates and protects us from being otherwise misled by noisy estimates in small samples.}\rem{In other words,} {Quoting \citeA[p.~163]{Gelman2010}: ``Bayesian inference is conservative in that it goes with what is already known, unless the new data force a change.''}
+
+Another way to interpret these weights is to think of the prior density as representing some amount of information that is available from an unspecified number of previous hypothetical observations, which are then added to the information from the real observations in the sample. For example, if after collecting 20 data points the weights come to $\W = .5$ and $1 - \W = .5$, that implies that the prior density carried 20 data points' worth of information. In studies for which obtaining a large sample is difficult, the ability to inject outside information into the problem to come to more informed conclusions can be a valuable asset. A common source of outside information is estimates of effect sizes from previous studies in the literature. As the sample becomes more precise, usually through increasing sample size, $\W$ will continually decrease, and eventually the amount of information added by the prior will become a negligible fraction of the total \cite<see also the principle of stable estimation, described in>{EdwardsEtAl1963}. 
+
+\note{The following example simplifies and replaces ``Putting stock in stock.'' The new example involves only a single null hypothesis test, rather than the unusual combination of two tests in the original example.}
+\example{Of Murtlaps and Muggles}\label{ex:muggle}
+According to \textit{Fantastic Beasts and Where to Find Them} \cite{scamander2001fantastic}, a Murtlap is a ``rat-like creature found in coastal areas of Britain'' (p.~56).  While typically not very aggressive, a startled Murtlap might bite a human, causing a mild rash, discomfort in the affected area,  profuse sweating, and some more unusual symptoms.
+
+Anecdotal reports dating back to the 1920s indicate that Muggles (non-magical folk) suffer a stronger immunohistological reaction to Murtlap bites.  This example of physiological differences between wizards and Muggles caught the interest of famed magizoologist Newton (``Newt'') Scamander, who decided to investigate the issue: When bitten by a Murtlap, do symptoms persist longer in the average Muggle than in the average wizard?
+
+\newcommand{\units}{hours}
+\FPset{\vmw}    {42}   % Magical population mean
+\FPset{\vsigma} { 2}   % Magical population standard deviation
+\FPset{\va}     {\vmw} % Muggle population mean prior mean
+\FPset{\vb}     { 6}   % Muggle population mean prior standard deviation
+\FPset{\vn}     {30}   % Sample size
+\FPset{\vxbar}  {43}   % Sample mean
+\FPeval{\vs}    {\vsigma/(\vn^(0.5))}  % Sample standard error of estimation
+\FPeval{\vbhat} {((\vn/\vsigma^2 + \vb^(-2))^(-1))^(0.5)}  % Posterior standard deviation
+\FPeval{\vW}    {\vbhat^2/\vb^2}  % Updating weight W^2
+\FPeval{\vahat} {\vW*\va + (1-\vW)*\vxbar}  % Posterior mean
+
+% Mass below the reference value
+\FPeval{\phitmp}{1/(1 + exp(-0.07056*((\vahat-\va)/\vbhat)^3 - 1.5976*(\vahat-\va)/\vbhat))}  % Approximation of the normal cdf...
+\FPeval{\phipct}{100*\phitmp}  % The percentage of mass
+
+% Bayes factor for the existence of a difference
+\FPeval{\pdferr}{0.5*((\va-\vahat)*(\va-\vahat)/\vbhat^2)}  % \pdferr\\       % argument to exp
+\FPexp{\pdfinvkernel}{\pdferr}                              % \pdfinvkernel\\ % inv normal kernel
+\FPeval{\vpdfc}{0.398942280401433/(\vbhat * \pdfinvkernel)} % \vpdfc \\       % p(X|H_0)
+\FPeval{\vpdfs}{0.398942280401433/\vb}                      % \vpdfs \\       % p(X|H_a)
+\FPeval{\vbf}{\vb/(\vbhat * \pdfinvkernel)}                 % \vbf \\         % BF_{cs}
+\FPeval{\ibf}{(\vbhat * \pdfinvkernel)/\vb}                 % \ibf \\         % BF_{sc}
+
+The Ministry of Magic keeps meticulous historical records of encounters between wizards and magical creatures that go back over a thousand years, so Scamander has a great deal of information on wizard reactions to Murtlap bites. Specifically, the average duration of the ensuing sweating episode is \vmw~\units, with a standard deviation of \vsigma. Due to the large amount of data available, the standard error of measurement is negligible. Scamander's question can now be rephrased: What is the probability a Murtlap bite on a Muggle results in an average sweating episode longer than \vmw~\units? 
+
+Scamander has two parameters of interest: the population mean---episode duration $\mu$---and its corresponding population standard deviation $\sigma$. He has no reason to believe there is a difference in dispersion between the magical and non-magical populations, so he will assume for convenience that $\sigma$ is known and does not differ between Muggles and wizards (i.e., $\sigma=2$; ideally, $\sigma$ would be estimated as well, but for ease of exposition we will take the standard deviation as known). 
+To characterize his background information about the population mean $\mu$, Scamander uses a prior density represented by a normal distribution, $p(\mu|a,b)=N(\mu|a,b^2)$, where $a$ represents the location of the mean of the prior and $b$ represents its standard deviation (i.e., the amount of uncertainty we have regarding $\mu$).
+
+Before collecting any data, Scamander must assign to $\mu$ a prior distribution that represents what he believes to be the range of plausible values for this parameter before collecting data. From his informal observations, Scamander believes that the mean difference between wizards and Muggles will probably not be larger than \print[0]{2.5*\vb}~\units. 
+To reflect this information, Scamander centers the prior distribution $p(\mu|a,b)$ at $a = \vmw$~\units{} (the average among wizards) with a standard deviation of $b = \vb$~\units, so that prior to running his study there is a 95\% probability $\mu$ lies between (approximately) \print[0]{\vmw-2.5758*\vb}{ }and \print[0]{\vmw+2.5758*\vb}~\units. Thus, $p(\mu|a,b) = N(\mu | \vmw, \vb^2)$.
+
+With these prior distributions in hand, Scamander can compute the prior probability that $\mu$ is less than $\vmw$~\units{} by finding the area under the prior distribution to the left of the benchmark value via integration. Integration from negative infinity to some constant is most conveniently calculated with the \emph{cumulative distribution function} $\Phi$:
+\begin{eqnarray*}
+p(\mu < \vmw|a,b) &=& \int_{-\infty}^{\vmw}N(\mu|a,b^2)d\mu\\
+                  &=& \Phi\left(\vmw | a, b^2\right),
+\end{eqnarray*}
+which in this case is exactly $0.5$ since the benchmark value is exactly the mean: Scamander centered his prior on \vmw{ }and specified that the Muggle sweating duration could be longer or shorter with equal probability. 
+
+Scamander covertly collects information on a representative sample of \vn{ }Muggles by exposing them to an angry Murtlap.\footnote{In order to preserve the wizarding world's statutes of secrecy, Muggles who are exposed to magical creatures must be turned over to a team of specially-trained wizards called \emph{Obliviators}, who will erase the Muggles' memories, return them to their homes, and gently steer them into the kitchen.} He finds a sample mean of $\bar x = \vxbar$ and standard error of $s = \sigma/\sqrt{n} = \vsigma/\sqrt{\vn} = \print{\vs}$. Scamander can now use his data and the above formulas to update what he knows about $\mu$.  
+
+Since the spread of the prior for $\mu$ is large compared to the standard error of the sample ($b = \vb$ versus $s = \print{\vs}$), Scamander has learned much from the data and his posterior density for $\mu$ is much less diffuse than his prior:
+$$
+\hat{b} = \sqrt{\frac{1}{\frac{1}{s^2}+\frac{1}{b^2}}}
+        = \sqrt{\frac{1}{\frac{1}{\print{\vs}^2}+\frac{1}{\vb^2}}}
+        = \print{\vbhat}.
+$$
+\noindent With $\hat{b}$ in hand, Scamander can find the weights needed to average $a$ and $\bar x$: $\W = (\print{\vbhat}/\vb)^2 = \print{\vW}$ and $1-\W = \print{1-\vW}$, thus $\hat{a} = \print{\vW} \times \va + \print{1-\vW} \times \vxbar = \print{\vahat}$~\units.  In summary, Scamander's prior distribution for $\mu$, $p(\mu|a,b) = N(\mu|\va,\vb^2)$, is updated into a much more informative posterior distribution, $p(\mu|\hat{a},\hat{b}) = N(\mu | \print{\vahat}, \print{\vbhat}^2)$. {This posterior distribution is shown in the left panel of Figure~\ref{fig:bi0:muggle}; note that the prior density looks nearly flat when compared to the much more peaked posterior density.}
+
+Now that the posterior distribution of $\mu$ is known, Scamander can revisit his original question: What is the probability that $\mu$ is greater than \va~\units? The answer is again obtained by finding the area under the posterior distribution to the right of the benchmark value via integration:
+\begin{eqnarray*}
+p(\mu < \va | \hat{a}, \hat{b})
+	&=& \int_{\va}^{\infty}N(\mu | \hat{a},\hat{b}^2)d\mu \\
+	&=& 1 - \int_{-\infty}^{\va}N(\mu | \hat{a},\hat{b}^2)d\mu \\
+    &=& 1 - \Phi\left(\va | \hat{a},\hat{b}^2\right) \\
+    &=& 1 - \Phi\left(\va | \print{\vahat},\print{\vbhat}^2\right) \approx \print[4]{\phitmp}.
+\end{eqnarray*}
+
+In summary, the probability that the reaction to Murtlap bites in the average Muggle is greater than in the average wizard increases from exactly $50\%$ to $\print[2]{\phipct}\%$. 
+
+\paragraph{Discussion}
+The conclusion of a Bayesian estimation problem is the full posterior density for the parameter{(s)}. That is, once the posterior density is obtained then the estimation problem is complete. However, researchers often choose to report summaries of the posterior distribution that represent its content in a meaningful way. One common summary of the posterior density is a \emph{posterior (credible) interval}. Credible intervals have a unique property: \rem{To report an $X$\% credible interval is to say that there is a probability of $X$\% that the parameter is within that interval.}
+{as \citeA{EdwardsEtAl1963} put it, ``The Bayesian theory of interval estimation is simple. To name an interval that you feel 95\% certain includes the true value of some parameter, simply inspect your posterior distribution of that parameter; any pair of points between which 95\% of your posterior density lies defines such an interval'' (p.~213).}
+{This property is made possible by the inclusion of a prior density in the statistical model \cite{Rouder2016freelunch}. It is important not to confuse credible intervals with \emph{confidence intervals}, which have no such property \cite{MoreyEtAlinpressCI}.}
+Thus, when Scamander reports that there is a \print[2]{\phipct}\% probability that $\mu$ lies between \va{ }and positive infinity~\units, he is reporting a \print[2]{\phipct}\% credible interval. It is important to note that there is no unique interval for summarizing the posterior distribution; the choice depends on the context of the research question.
+\note{The inserted text above was originally a footnote.}
+
+\section{Model comparison}
+\epigraph{[M]ore attention [should] be paid to the precise statement of the alternatives involved in the questions asked. It is sometimes considered a paradox that the answer depends not only on the observations but on the question; it should be a platitude.}{H.~\citeA{Jeffreys1939}}
+
+Consider the following theoretical questions. Is participant performance different than chance? Does this gene affect IQ? Does stimulus orientation influence response latency? For each of these questions the researcher has a special interest in a particular parameter value and entertains it as a possibility. However, when we estimate a parameter using a continuous distribution the answers to each of these questions is necessarily ``yes.'' To see why, recall that a probability density function specifies how much probability exists \emph{near}---not \emph{at}---a particular value of the parameter. That is, with a continuous probability distribution, probability only exists within a given \textit{range} of the parameter space; the probability of any \textit{single point} within the distribution is zero. This is inconsistent with our belief that a specified parameter value might hold true. Moreover, this poses a problem for any research question that focuses on a single value of a continuous parameter, because if its prior probability is zero then no amount of data can cause its posterior probability to become anything other than zero.
+
+A simple but brilliant solution to this problem was first \rem{proposed} {executed} by \citeA{Haldane1932} but is credited mostly to \citeauthor{Jeffreys1939} (1939; see \citeNP{EtzOrigin}).  The solution involves applying the sum and product rules \emph{across multiple independent statistical models at once}. We can specify multiple separate models that have different implications about the parameter of interest, call it $\theta$, and calculate the probability of each model after data are collected. One model, say $\M_0$, says $\theta$ is equal to a single special value denoted $\theta_0$. A second model, say $\M_1$, says $\theta$ is unknown and assigns it a continuous prior density, implying $\theta$ is not equal to $\theta_0$.
+After collecting data $X$, there are two main questions to answer: (1) What is $P(\M_0|X)$, the posterior probability that $\theta=\theta_0$? And (2) what is  $p(\theta|X,\M_1)$, the posterior distribution\footnote{Note that we will now be using probabilities and probability densities side-by-side. In general, if the event to which the measure applies (i.e., what is to the left of the vertical bar) has a finite number of possible values, we will consider probabilities and use uppercase $P(\cdot)$ to indicate that. If the event has an infinite number of possible values in a continuum, we will consider probability densities and use lowercase $p(\cdot)$. In the case of a joint event in which at least one component has an infinite set of possibilities, the joint event will also have an infinite set of possibilities and we will use probability densities there also.}
+of $\theta$ under $\M_1$ (i.e., considering the new data $X$, if $\theta\neq\theta_0$ then what might $\theta$ be)?
+
+As before, this scenario can be approached with the product and sum rules of probability. The setup of the problem is captured by Figure~\ref{fig:bi0:hier} (focusing for now on the left half). We start at the initial fork with two potential models: $\M_0$ and $\M_1$. This layer of analysis is called the \textit{model space}, since it deals with the probability of the models. Subsequently, each model implies some belief about the value of $\theta$. This layer of analysis is called the \textit{parameter space}, since it specifies what is known about the parameters within a model and each model has its own independent parameter space. Under $\M_0$ the value of $\theta$ is known to be equal to $\theta_0$, so all of its probability is packed into a ``spike'' (a \emph{point mass}) at precisely $\theta_0$. Under $\M_1$ the value of $\theta$ is unknown and we place a probability distribution over the potential values of $\theta$ in the form of a \emph{conditional prior density}. Each model also makes predictions about what data will occur in the experiment, information represented by each model's respective \textit{sample space.} We then condition on the data we observe, which allows us to update each layer of the analysis to account for the information gained. Below is a step-by-step account of how this is done.
+
+We answer our questions in reverse order, first deriving the posterior distribution of $\theta$ under $\M_1$, for a reason that will become clear in a moment. 
+In this setup there are events that vary among three dimensions: $X$, $\theta$, and $\M_1$. When joint events have more than two components, the product rule decomposes $p(X,\theta,\M_1)$ one component at a time to create a chain of conditional probabilities and densities (for this reason the product rule is also known as the \textit{chain rule}). This was seen above in Example~\ref{ex:hat}. These chains can be thought of as moving from one layer of Figure~\ref{fig:bi0:hier} to the next. Thus, since we could choose any one of the three events to be factored out first, the product rule creates three possible initial chains with two probabilities per chain,
+\begin{eqnarray*}
+p(X,\theta,\M_1) & = & P(\M_1)p(X,\theta|\M_1)   \\
+                 & = & P(X)p(\theta,\M_1|X)      \\
+                 & = & p(\theta)p(X,\M_1|\theta).
+\end{eqnarray*}
+(where the use of $P(X)$ or $p(X)$ depends on whether the data are discrete or continuous; we assume they are discrete here).
+
+A natural choice is to work with the first formulation, $p(X,\theta,\M_1)=P(\M_1)p(X,\theta|\M_1)$, since $P(\M_1)$%
+, the prior probability of the model,  
+is known to us (it corresponds to the probability we take the right fork at the start of Figure~\ref{fig:bi0:hier}). The product rule can then be applied again to the remaining joint probability on the right hand side as follows: 
+\begin{equation}\label{eq:rhs1}
+P(\M_1) \times p(X,\theta|\M_1) = P(\M_1) \times P(X|\M_1)p(\theta|X,\M_1),
+\end{equation}
+By symmetry of the product rule, we can also write 
+\begin{equation}\label{eq:rhs2}P(\M_1) \times P(X,\theta|\M_1) = P(\M_1) \times p(\theta|\M_1)P(X|\theta,\M_1).\end{equation}
+If we now equate the right hand sides of Equations~\ref{eq:rhs1} and~\ref{eq:rhs2}, we can divide out $P(\M_1)$ and $P(X|\M_1)$:
+\begin{eqnarray*}
+P(\M_1)P(X|\M_1)p(\theta|X,\M_1) &=& P(\M_1)p(\theta|\M_1)P(X|\theta,\M_1)\\[1ex]
+p(\theta|X,\M_1) &=& \frac{p(\theta|\M_1)P(X|\theta,\M_1)}{P(X|\M_1)}
+\end{eqnarray*}
+and by recognizing that ${P(X|\M_1)=\int_\Theta p(\theta|\M_1)P(X|\M_1,\theta)d\theta}$ by way of the sum rule, we are left with the following:
+\begin{equation}\label{eq:MCpost}
+p(\theta|X,\M_1) = \dfrac{p(\theta|\M_1)P(X|\theta,\M_1)}{\int_\Theta p(\theta|\M_1)P(X|\theta,\M_1)d\theta}.
+\end{equation}
+This last formula is identical to the continuous form of Bayes' Rule (Equation~\ref{eq:bayesrule3}), where now each term is also conditional on $\M_1$.
+
+The implication of this finding is that it is possible to perform inference using the distribution of $\theta$ under $\M_1$, $p(\theta|X,\M_1)$, \emph{ignoring everything relating to other models}, since no other models (such as $\M_0$) feature in this calculation. As before, the denominator is known as the \textit{marginal likelihood} for $\M_1$, and represents a predictive distribution for potential future data, $P(X|\M_1)$. This predictive distribution is shown in the sample space under $\M_1$ in Figure~\ref{fig:bi0:hier}, and can be thought of as the average prediction made across all possible parameter values in the model (weighted by the conditional prior density). Once the data are collected and the result is known, we can condition on the outcome and use it to update $p(\theta|\M_1)$ to obtain $p(\theta|X,\M_1)$. 
+
+To answer our first question---what is $P(\M_0|X)$?---we need to find our way back to the discrete form of Bayes' Rule (Equation~\ref{eq:bayesrule2}). Recall that for hypothesis testing the key terms to find are $P(X|\M_0)$ and $P(X|\M_1)$, which can be interpreted as how accurately each hypothesis predicts the observed data in relation to the other. Since the parameter space under $\M_0$ is simply $\theta=\theta_0$, we can write $P(X|\M_0) = P(X|\theta_0)$. However, since the parameter space under $\M_1$ includes a continuous distribution, we need to find $\M_1$'s average predictive success across the whole parameter space, $P(X|\M_1)=\int_\Theta p(\theta|\M_1)P(X|\M_1,\theta)d\theta$. Conveniently, as we just saw above in Equation~\ref{eq:MCpost}, this is also the normalizing constant in the denominator of the posterior distribution of $\theta$ under $\M_1$. Hence, the discrete form of Bayes' Rule for hypothesis testing can be rewritten as
+\begin{multline*}
+P(\M_1|X)
+=\dfrac{P(\M_1) P(X|\M_1)}{P(\M_1)P(X|\M_1)+P(\M_0)P(X|\M_0)}\\[3ex]
+=\dfrac{P(\M_1) \int_\Theta p(\theta|\M_1)P(X|\theta,\M_1)d\theta}{P(\M_1)\int_\Theta p(\theta|\M_1)P(X|\theta,\M_1)d\theta+P(\M_0)P(X|\theta_0)}.
+\end{multline*}
+Furthermore, in cases of model comparison between a ``point null'' (i.e., an hypothesis that, like our $\M_0$, involves a prior point mass on some parameter) and an alternative with a continuous prior for the parameter, one can rewrite the odds form of Bayes' Rule from Equation~\ref{eq:bayesodds} as follows:
+$$
+\begin{array}{rcl}
+\underbrace{\dfrac{P(\M_1|X)} {P(\M_0|X)}}_\text{Posterior odds} &=&
+\dfrac{P(\M_1)}{P(\M_0)} \ \times \
+\dfrac{P(X|\M_1)}{P(X|\M_0)}\\[3ex]
+&=&
+\underbrace{\frac{P(\M_1)}{P(\M_0)}}_\text{Prior odds} \ \times \
+\underbrace{\frac{\int_\Theta p(\theta|\M_1)P(X|\theta,\M_1)d\theta}{P(X|\theta_0)}}_{\text{Bayes factor} ~(BF_{10})},
+\end{array}
+$$
+where the Bayes factor is the ratio of the marginal likelihoods from the two models, and its subscript indicates which models are being compared ($BF_{10}$ means $\M_1$ is in the numerator versus $\M_0$ in the denominator).
+
+Finally, we point out one specific application of Bayes' rule that occurs when certain values of $\theta$ have a special theoretical status. For example, if $\theta$ represents the difference between two conditions in an experiment, then the case $\theta=0$ will often be of special interest (see also \citeNP{RouderSI}). Dividing each side of Equation~\ref{eq:MCpost} by $p(\theta|\M_1)$ allows one to quantify the change in the density at this point: 
+$$ \frac{p(\theta=0|X,\M_1)}{p(\theta=0|\M_1)} = 
+\frac{P(X|\theta=0,\M_1)}{\int_\Theta p(\theta|\M_1)p(X|\theta,\M_1)d\theta} = BF_{01}
+$$ 
+This change in density is known as the Savage--Dickey density ratio or the Savage--Dickey representation of the Bayes factor (\citeNP{Dickey1971}; see also \citeNP{WagenmakersEtAl2010SDPsychologists}, and \citeNP{WagenmakersSI}; and see also \citeNP{marin2010resolving}, for some cautionary notes). When it applies, the Savage--Dickey ratio allows for an especially intuitive interpretation of the Bayes factor: If the point null value is lower on the alternative model's conditional posterior density than its prior density, the Bayes factor supports $\M_1$ over $\M_0$ by the ratio of their respective heights, and vice-versa. 
+
+{The conditions under which the Savage--Dickey ratio applies are typically met in practice, since they correspond to the natural way one would build nested models for comparison {(for a good discussion on the different types of nested models see \citeNP{ConsonniVeronese2008}, Section 2)}. Namely, that all facets of the models are the same except that the smaller model fixes $\theta$ to be $\theta_0$. In our development above there is only one parameter so this condition is automatically satisfied. If, however, we have additional parameters common to both models, say $\phi$, then the Savage-Dickey ratio is obtained using the marginal prior and posterior densities, $p(\theta=\theta_0|X,\M_1)/p(\theta=\theta_0|\M_1)$, where the marginal distribution is found using the sum rule, $p(\theta|X,\M_1)=\int_\Phi p(\phi,\theta|X,\M_1)d\phi$. For this to be a proper representation of the Bayes factor, we must ensure that the conditional prior for $\phi$ under $\M_1$, when $\theta=\theta_0$, equals the prior density for $\phi$ under $\M_0$. In other terms, the Savage-Dickey representation holds only if the parameters are statistically independent a priori: $p(\phi|\theta=\theta_0,\M_1) = p(\phi|\M_0)$.}
+\note{The inserted text above was originally a footnote.}
+
+Above, our motivation for model comparison was that we wanted to test the hypothesis that a parameter took a single specified value. However, model comparison is not limited to cases where point nulls are tested. The above formulation allows us to compare any number of different types of models by finding the appropriate $P(X|\M)$. Models do not need to be nested or even have similar functional forms; in fact, the models need not be related in any other way than that they make quantitative predictions about the data that have been observed. For example, a non-nested comparison might pit a model with a mostly positive prior distribution for $\theta$ against a model where the support of the prior distribution for $\theta$ is restricted to negative values only. Or rather than a precise point null we can easily adapt the null model such that we instead compare $\M_1$ against model $\M_S$, which says $\theta$ is ``small.'' Extending model comparison to the scenario where there are more than two (but finitely many) competing models $\M_k$ is similar to before, in that
+\begin{eqnarray}\label{eq:modsel}
+P(\M_i|X) =\frac{P(\M_i) p(X|\M_i)}{\sum_k P(\M_k)p(X|\M_k)}.
+\end{eqnarray}
+
+In practice, Bayes factors can be difficult to compute for more complicated models because one must integrate over possibly very many parameters to obtain the marginal likelihood \cite{KassRaftery1995,Wasserman2000}. {Recent computational developments have made the computation of Bayes factors more tractable, especially for common scenarios \cite{LoveSI,WagenmakersSI}. For uncommon or complex scenarios,}\rem{For this reason} one might resort to reporting a different model comparison metric that does not rely on the marginal likelihood, such as the various information criteria (AIC, BIC, DIC, WAIC) or leave-one-out cross validation \cite<LOOCV; see>{SpiegelhalterEtAl2002,VandekerckhoveEtAl2015MPT,VehtariOjanen2012}. {However, it should be emphasized that for the purposes of inference these alternative methods can be suboptimal.}
+
+\note{The following example has been adapted to fit the simplified scenario of the previous example.}
+\example{The French correction} \label{ex:french}
+Proud of his work on Murtlap bite sensitivity, Newt Scamander (from Example~\ref{ex:muggle}) decides to present his results at a conference on magical zoology held in Carcassonne, France.  As required by the 1694 International Decree on the Right of Access to Magical Research Results, he has made all his data and methods publicly available ahead of time and he is confident that his findings will withstand the review of the audience at this annual meeting.  He delivers a flawless presentation that culminates in his conclusion that Muggles are, indeed, slightly more sensitive to Murtlap bites than magical folk are. The evidence, he claims, is right there in the data.
+
+After his presentation, Scamander is approached by a member of the audience---the famously critical high-born wizard Jean-Marie le Cornichonesque---with a simple comment on the work: ``\emph{Monsieur}, you have not told us the evidence for your claim.''
+
+``In fact,'' continues le Cornichonesque, ``given your prior distributions for the difference between Muggles and magical folk, you have not even \emph{considered} the possibility that the true  difference might be exactly zero, and your results merely noise. In other words, you are putting the cart before the horse because you estimate a population difference before establishing that {evidence for} one exists! Instead, if you please, let us ascertain how much more stock we should put in \textit{your} claim over the \textit{more parsimonious} claim of no difference between the respective population means.'' 
+
+Scamander is unfazed by the nobleman's challenge, and, with a flourish of his wand makes the following equations appear in the air between them:
+$$\begin{array}{rll}
+\M_s: & \mu \sim N(\va, \vb) & \\
+\M_c: & \mu   =  \va         & 
+\end{array}$$
+``These,'' Scamander says, ``are our respective hypotheses. I claim that Muggles have different symptom durations on average than wizards and witches. I have prior information that completes my model. Your claim is that the population means may be exactly equal. In order to quantify the relative support for each of these hypotheses, we need a Bayes factor. Luckily, in this case the Bayes factor is quite easy to calculate with the Savage-Dickey density ratio, like so\dots
+\begin{eqnarray*}
+\frac{p(\mu| X, \M_s)}{p(\mu|\M_s)}
+   &=& \frac{p(\mu| X,\M_s)}{p(\mu|\M_s)} \\
+   &=& \frac{N(\mu| \hat{a}, \hat{b}^2)}{N(\mu|a,b^2)}
+\end{eqnarray*}
+``Now that we have derived the ratio of posterior to prior density, all that remains is to plug in the values of the parameters and to compute the ratio of Gaussian densities at the specified points\dots''
+
+\begin{align*}
+BF_{cs} &=  \frac{N(\va \,|\, \print{\vahat}, \print{\vbhat}^2)}{N(\va \,|\, \va, \vb^2)}\\
+        &=  \frac{\print{\vpdfc}}{\print{\vpdfs}} = \print{\vbf} = \frac{1}{\print{\ibf}}
+\end{align*}
+
+``\emph{Tant pis.} A Bayes factor of not even three favors your hypothesis. You have essentially \textit{no} evidence for your claim,'' snorts le Cornichonesque, before turning his back and leaving Scamander alone in the conference room.
+
+\begin{figure}[bt]
+\centering
+\includegraphics[scale=1%,viewport=150 333 445 453,bb=150 333 445 453,clip
+]{figs/bi0_etzvandekerckhove_fig5}\vspace{2ex}
+\caption{A closer look at the prior (dashed) and posterior (solid) densities involved in Newt Scamander's study on the relative sensitivity of magical folk and Muggles to Murtlap bites. The left panel shows the location of the fixed value (\vmw) in the body of the prior and posterior distributions. The right panel is zoomed in on the density in the area around the fixed value. Comparing the prior density to the posterior density at the fixed value reveals that very little was learned about this specific value: the density under the posterior is close to the density under the prior and amounts to a Bayes factor of approximately 3 supporting a deviation from the fixed value.}\label{fig:bi0:muggle}
+\end{figure}
+
+\paragraph{Discussion} What has happened here? At first glance, it appears that at first Scamander had strong evidence that Muggles are more sensitive than magical folk to Murtlap bites, and now through some sleight of hand his evidence appears to have vanished. To resolve the paradox of le Cornichonesque, it is important to appreciate a few facts. First, in Example~\ref{ex:muggle}, Scamander indeed did not consider the hypothesis $\M_c$ that $\mu = \vmw$. In fact, because a continuous prior density was assigned to $\mu$, the prior probability of it taking on any particular value is zero.
+
+The paradox of le Cornichonesque occurs in part because of a confusion between the hypotheses being considered. While in our example, le Cornichonesque wishes to compare an ``existence'' and a ``nonexistence'' hypothesis, Scamander started out from an existence assumption and arrives at conclusions about \emph{directionality} \cite<see also>{marsman2016}.
+
+Implicitly, there are four different models being considered in all. There is $\M_c$, which specifies no effect, and $\M_z$, which specifies \emph{some} effect, but also $\M_-$, which specifies an effect in the negative direction, and $\M_+$, which specifies an effect in the positive direction. These last two models are concealed by Scamander's original analysis, but his model specification implies a certain probability for the events $(\mu < \vmw)$ and $(\mu > \vmw)$. Indeed, because we know that the probability that Muggles are more (vs.~less) sensitive than their magical counterparts increased from $P(\mu < \vmw) = 50\%$ to $P(\mu < \vmw|X) = \print[2]{\phipct}\%$, we can compute Bayes factors for this case as well. In odds notation, the prior odds were increased from 1 to \FPeval{\tmp}{round(\phipct/(100-\phipct),0)}\tmp;  the Bayes factor, found by taking the ratio of posterior to prior odds, is in this case equal to the posterior odds.  Scamander's test for direction returns a much stronger result than le Cornichoneque's test of existence.
+
+As a rule, inference must be limited to the hypotheses under consideration: No method of inference can make claims about theories not considered or ruled out a priori. Moreover, the answer we get naturally depends on the question we ask. The example that follows involves a very similar situation, but the risk of the paradox of le Cornichonesque is avoided by making explicit all hypotheses under consideration.
+
+\example{The measure of an elf} \label{ex:elf}
+In the wizarding world, the Ministry of Magic distinguishes between two types of living creatures. \emph{Beings}, such as witches, wizards, and vampires, are creatures who have the intelligence needed to understand laws and function in a peaceful society. By contrasts, \emph{Beasts} are creatures such as trolls, dragons, and grindylows, which do not have that capacity. Recently, the classification of house-elves has become a matter of contention.  On one side of the debate is the populist wizard and radio personality Edward Runcorn, who claims that house-elves are so far beneath wizard intelligence that they should be classified as Beasts; on the other side is the famed elfish philosopher and acclaimed author Doc, who argues that elves are as intelligent as wizards and should be classified as Beings, with all the rights and responsibilities thereof.\newcommand{\wishes}{{W.I.S.H.E.S.\xspace}} 
+The Ministry of Magic decides to investigate and convene the \emph{Wizengamot's Internal Subcommittee on House Elf Status} (\wishes), an ad-hoc expert committee. \wishes{} in turn calls on psychometrician Dr.\ Karin 
+Bones of the Magical Testing Service to decide whether house-elves are indeed as intelligent as wizards.
+
+Bones knows she will be asked to testify before \wishes{} and takes note of the composition of the three-member committee. The committee's chairperson is Griselda Marchbanks, a venerable and wise witch who is known for her impartiality and for being of open mind to all eventualities. However, the junior members of \wishes{} are not so impartial: one member is Edward Runcorn, the magical supremacist who believes that wizards and witches are more intelligent than house elves; the other is Hermione Granger, a strong egalitarian who believes that house elves are equal in intelligence to wizards and witches.
+
+Bones begins her task by formalizing three basic hypotheses.  She will call the population's average wizarding intelligence quotient (WIQ) $\mu_w$ for wizards and witches and $\mu_e$ for elves.  She can now call the difference between the population means $\delta = \mu_w - \mu_e$ so that $\delta$ captures how much \emph{more} intelligent magical folk are.  If wizards and elves are equally intelligent, $\delta=0$. If they are not, $\delta$ can take on nonzero values.
+We can restate this as an hypothesis of approximately no difference ($\M_0$), an hypothesis of substantial positive difference ($\M_+$; magical folk much more intelligent than elves), and an hypothesis of substantial negative difference ($\M_-$; elves much more intelligent than magical folk):
+\begin{eqnarray*}
+\M_0:& \delta \approx 0\\
+\M_+:& \delta >       0\\
+\M_-:& \delta <       0.
+\end{eqnarray*}
+However, it is not enough to state simply that $\delta < 0$ because as a model for data, it is underspecified: no quantitative predictions follow (i.e., the likelihood for a specific data set cannot be calculated). In order to be more specific, Bones consults with \wishes{} and together they decide on three concrete models:\footnote{$I(\cdot)$ is the \emph{indicator function}, which takes the value $1$ if its argument is true and $0$ otherwise; here it takes the role of a truncation. Since these distributions are truncated, they must be multiplied by a suitable constant such that they integrate to 1 (i.e., we \textit{renormalize} them to be proper distributions).}
+
+\begin{center}\begin{tabular}{rrll}
+$p(\delta|\M_0)$ &=& $I(-5 < \delta < 5)/10$     &{ if }$-5 < \delta < 5$\\
+$p(\delta|\M_+)$ &=& $2N(\delta|5,15)I(\delta>5)$ &{ if }$\delta > 5$\\
+$p(\delta|\M_-)$ &=& $2N(\delta|-5,15)I(\delta< -5)$ &{ if }$\delta < -5$.
+\end{tabular}\end{center}
+$\M_0$ is the assumption that the true difference $\delta$ is somewhere between $-5$ and $5$ with all values equally likely -- a uniform distribution. This is based on a consensus among \wishes{} that differences of only five WIQ points are negligible for the Ministry's classification purposes: differences in this range are \emph{practically equivalent to zero}. Under $\M_+$, it is assumed that wizards score at least 5 points higher than elves on average ($\delta > 5$) but differences of 20 are not unexpected and differences of 40 possible, if unlikely. Under $\M_-$, it is assumed that wizards score at least 5 points \emph{lower} than elves ($\delta < -5$). 
+
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth%,viewport=90 340 494 698,bb=90 340 494 698,clip
+]{figs/bi0_etzvandekerckhove_fig6}\vspace{2ex}
+\caption{\textbf{Left:} Each of the three panel members has their own prior probability on each of the three possible models $\M_-$, $\M_0$, and $\M_+$. In this scenario, the three models do not overlap in the parameter space: no parameter value is supported by more than one model. However, this is merely a convenient feature of this example and not a requirement of Bayesian model selection -- it is entirely possible (and common) for two different models to support the same parameter value. {\textbf{Right:} The predicted observed difference in a sample with a standard error of estimation of 1.5. Here, the predictive distribution for each model has been multiplied by the prior probability for that model. This representation has the interesting property that the posterior ratio between two models, given some observed difference, can be read from the figure as the ratio between the heights of the two corresponding densities. Note, for example, that at the dashed vertical line (where $d=2$), the posterior probability for $\M_0$ is higher than that for $\M_-$ or $\M_+$ for every judge.  If the distributions had not been scaled by the prior probability, these height ratios would give the Bayes factor.}}
+\label{fig:bi0:elffig}
+\end{figure*}
+
+
+After having determined the three hypotheses that \wishes{} wishes to consider, Bones decides to collect one more piece of information: how strongly each member of the committee believes in each of the three options. She provides each member with 100 tokens and three cups, and gives them the following instructions: 
+\begin{quote}
+I would like you to distribute these 100 tokens over these three cups. The first cup represents $\M_-$, the second $\M_0$, and the third $\M_+$. You should distribute them proportionally to how strongly you believe in each hypothesis.
+\end{quote}
+Marchbanks' inferred prior probabilities of each of the three hypotheses are $(25,50,25)$, Granger's are $(15,70,15)$, and Runcorn's are $(5,15,80)$. {For more in-depth discussion on prior elicitation, see \citeA{Garthwaite2005} and \citeA{LeeSI}.}
+\note{The inserted text above was originally a footnote.}
+
+To summarize the different prior expectations, Bones constructs a figure to display the marginal distribution of the effect size $\delta$ for each committee member. This marginal prior density is easily obtained with the sum rule: \begin{eqnarray*} p(\delta) &=& \sum_{h \in \left(\M_-,\M_0,\M_+\right)}p(h)p(\delta|h) \\ &=& p(\M_-)p(\delta|\M_-) + p(\M_0)p(\delta|\M_0) + p(\M_+)p(\delta|\M_+). \end{eqnarray*} Figure~\ref{fig:bi0:elffig} shows the resulting distribution for each of the committee members. These graphs serve to illustrate the relative support each committee member's prior gives to each possible population difference.
+
+Using a well-calibrated test, Bones sets out to gather a sample of $n_1 = 100$ magical folk and $n_2 = 100$ house-elves, and obtains WIQ scores of $M_w = 99.00$ for wizards and witches and $M_e = 101.00$ for elves, giving a sample difference of $d = -2.00$. The test is calibrated such that the standard deviation for magical folk and elves are both equal to 15: $\sigma_w = \sigma_e = 15.00$, which in turn gives a standard deviation for their difference $\delta$ of $\sigma_\delta = \sqrt{15^2+15^2} = 21.21$. Therefore, the standard error of measurement is $s_e = 21.21/\sqrt{n_1+n_2}=1.50$ and the likelihood function to use is now $N\left(d|\delta,s_e^2\right) = N\left(-2|\delta,1.5^2\right)$.
+
+To address the committee's question, Bones can now use Equation~\ref{eq:modsel} to obtain the posterior probability of each model:
+$$P(\M_i|d) = \frac{p(\M_i)p(d|\M_i)}{P(\M_0)p(d|\M_0) + P(\M_-)p(d|\M_-) + P(\M_+)p(d|\M_+)}.$$
+For this, she needs to compute the three marginal likelihoods $p(d|\M_0)$, $p(d|\M_-)$, and $p(d|\M_+)$, which are obtained with the continuous sum rule. For the case of $\M_0$, the marginal likelihood can be worked out by hand in a few steps:\footnote{Bones' derivation makes use of the fact that the identity function $I(\cdot)$ can be factored out of the integrand if the integration bounds are accordingly limited to the region where the argument is true. This fact is used in moving from the second step to the third.}
+\begin{eqnarray*}
+p(d|\M_0) 
+&=& \int_\Delta p(\delta|\M_0)\times p(d|\delta,\M_0) d\delta\\
+&=& \int_\Delta\frac{1}{10}I(-5<\delta<5) \times N(d|\delta,s_e^2)  d\delta\\
+&=& \frac{1}{10} \int_{-5}^{5} N(d|\delta,s_e^2) d\delta\\
+&=& \frac{1}{10} \left[ \Phi(2|-5,1.5^2) - \Phi(2|5,1.5^2) \right]\\ 
+&=& 9.772 \times 10^{-2}
+\end{eqnarray*}
+For the cases of $\M_+$ and $\M_-$, the derivation is much more tedious. It can be done by hand by making use of the fact that the product of two normal distributions has a closed-form solution. However, a numerical approximation can be very conveniently performed with standard computational software or---at the Ministry of Magic---a simple numerical integration spell.\footnote{Some popular non-magical options include MATLAB \protect\cite{MATLAB} and R \cite{R}, or readers can use www.wolframalpha.com. MATLAB and R code for this example is available on the OSF repository and in the Appendix.} For this particular task, Dr.\ Bones arrives at $p(d|\M_+) = 8.139 \times 10^{-8}$ and $p(d|\M_-) = 1.209 \times 10^{-3}$.
+
+Bones now has all that she needs to compute the posterior probabilities of each hypothesis and for each committee member. The prior and posterior probabilities are given in Table~\ref{tab:bi0:elf}. As it turns out, the data that Bones has available should effectively overwhelm each of the three members' prior probabilities and put the bulk of the posterior probability on $\M_0$ for each member. Counting on the ability of each committee member to rationally update their beliefs, she prepares a concise presentation in which she lays out a confident case for elf equality and ``Being'' status.
+\newcommand{\p}{\phantom{0}}
+
+\begin{table}[!htb]\centering
+\caption{
+Prior and posterior probabilities for each hypothesis and each committee member. Probabilities are updated with Equation~\ref{eq:modsel}. The fourth row in each half of the table serves to emphasize that, for the purposes of the committee, $P(\M_-)$ and $P(\M_0)$ constitute a single category since they both lead to the classification of ``Being'' rather than ``Beast.'' Thus, we consider $P(\mbox{``Being''}) = P(  \M_-) + P(  \M_0)$.}\label{tab:bi0:elf}
+\begin{tabular}{lccc}
+             & Marchbanks& Granger & Runcorn \\ \hline
+ $P(  \M_-)$ &   \p.250  & \p.150  & \p.050  \\
+ $P(  \M_0)$ &   \p.500  & \p.700  & \p.150  \\
+ $P(  \M_+)$ &   \p.250  & \p.150  & \p.850  \\
+ $P(\mbox{``Being''})$ & \p.750 & \p.850 & \p.200 \\
+ \hline
+ $P(  \M_-|d)$ &   \p.006  & \p.003  & \p.012 \\
+ $P(  \M_0|d)$ &   \p.994  & \p.997  & \p.988 \\
+ $P(  \M_+|d)$ &   \p.000  & \p.000  & \p.000 \\  $P(\mbox{``Being''}\,|\,d)$ & 1.000 & 1.000 & 1.000 \\
+ \hline
+\end{tabular}
+\end{table}
+
+
+\paragraph{Discussion} Probability theory allows model comparison in a wide variety of scenarios. In this example the psychometrician deals with a set of three distinct models, each of which was constructed ad hoc -- custom-built to capture the psychological intuition of the researcher (and a review panel).  Once the models were built, the researcher had only to ``turn the crank'' of probabilistic inference and posterior probabilities are obtained through standard mechanisms that rely on little other than the sum and product rules of probability.  As this example illustrates, the practical computation of posterior probabilities will often rely on calculus or numerical integration methods{; several papers in this special issue deal with computational software that is available \cite{LoveSI,MatzkeSI,vanravenzwaaijSI,WagenmakersSI}.}
+
+An interesting aspect to this example is the fact that the analyst is asked to communicate to a diverse audience: three judges who hold different prior notions about the crucial hypotheses. {That is, they hold different notions on the \emph{prior probability that each hypothesis is true}. They happen to agree on the \emph{prior distribution of the $\delta$ parameter} under each hypothesis (but we made that simplification only for ease of exposition; it is not a requirement of the method).} This is comparable to the situation in which most researchers find themselves: there is one data set that brings evidence, but there are many---possibly diverse---prior notions. Given that prior probabilities must be subjective, how can researchers hope to reasonably communicate their results if they can only report their own subjective knowledge?
+
+One potential strategy is the one employed by the psychometrician in the example.  The strategy relies on the realization that we can compute posterior probabilities for \emph{any} rational person as soon as we know their prior probabilities.  Because the psychometrician had access to the prior probabilities held by each judge, she was able to determine whether her evidence would be compelling to this particular audience.
+
+Social scientists who present evidence to a broad audience can take a similar approach by \emph{formulating multiple prior distributions} -- for example, some informative priors motivated by theory, some priors that are uninformative or indifferent in some ways, and some priors that might be held by a skeptic. Such a practice would be a form of \emph{sensitivity analysis} or \emph{robustness analysis}.  
+If the data available are sufficiently strong that skeptics of all camps must rationally come to the same conclusion, then concerns regarding the choice of priors are largely alleviated.
+This was the case above, where Marchbanks, Granger, and Runcorn all were left with a greater than 98\% posterior probability for the model specifying elf equality despite their wide-ranging prior probabilities.
+
+Of course, data is often noisy and the evidence may in many cases not be sufficient to convince the strongest skeptics. In such cases, collecting further data may be useful. Otherwise, the researcher can transparently acknowledge that reasonable people could reasonably come to different conclusions. 
+
+An alternative option is to report the evidence in isolation.  Especially when the ultimate claim is binary---a discrimination between two models---one might report only the amount of discriminating evidence for or against a model. By reporting only the amount of evidence, in the form of a Bayes factor, every individual reader can combine that evidence with their own prior and form their own conclusions. This is now a widely-recommended approach (e.g., \citeNP{WagenmakersSI}; but see \citeNP{Robertinpress}, for words of caution{; and see \citeNP{KruschkeSI2}, for a discussion of scenarios in which the Bayes factor should not be the final step of an analysis}) that is taken in the final example.
+
+\example{Luck of the Irish}\label{ex:irish}
+Every four years, the wizarding world organizes the most exhilarating sporting event on earth: the Quidditch World Cup.  However, the Cup is often a source of controversy. In a recent edition, aspersions were cast on the uncommonly strong showing by the Irish team: An accusation was brought that the Irish players were dosed with a curious potion called \emph{felix felicis}, which gives an individual an extraordinary amount of ``dumb luck.''
+
+At the Ministry of Magic's Department for International Magical Cooperation---who oversee the event and have decided to investigate the doping claims---junior statistician Angelina Johnson noticed that the Irish team had \emph{another} striking piece of good luck: in each of the four games, the Irish team captain won the coin toss that allows them to choose in which direction to play.  From these data, Johnson reasons as follows.
+
+If the coin is fair, and there is no cheating, then the Irish team captain should win the toss with 50\% probability on each occasion ($\M_0: \theta =\theta_0= 0.5$). However, if the captain has taken \textit{felix felicis}, they should win with a higher, but unknown probability ($\M_J: \theta > 0.5$). Johnson then sets out to determine whether this small amount of data ($k=4$ wins in $N=4$ games) contains enough evidence to warrant strong suspicions.
+
+The discriminating evidence is given by the Bayes factor, $BF_{J0}=P(k|\M_J)/P(k|\M_0)$, where the marginal likelihoods (with capital $P(\cdot)$ since number of wins are discrete) can be calculated one model at a time. Since the outcomes of the four coin tosses are assumed independent given $\theta$, the probability of $k$ successes in any sequence of length $N$ is given by the binomial distribution: $\binom{N}{k}\,\theta^k(1-\theta)^{N-k}$, where the binomial coefficient $\binom{N}{k}$ is the number of ways $N$ items can arrange themselves in groups of size $k$ (e.g., 4 items can be arranged into a group of 4 exactly 1 way). Thus, for $\M_0$, 
+\begin{eqnarray*}
+P(k|\M_0) &=& \binom{4}{4}\, 0.5^4 \times 0.5^0\\
+&=& \frac{1}{2^{4}} = \frac{1}{16}.
+\end{eqnarray*}
+For $\M_J$, Johnson needs to express her prior knowledge of the parameter $\theta$. Since she knows very little about the potion \emph{felix felicis}, she takes all values between $0.5$ and $1.0$ to be equally plausible, so that $P(\theta|\M_J) = 2 I(0.5<\theta<1.0)$. {The shape of this prior density is depicted in the left half of Figure~\ref{fig:bi0:hier}.}
+Hence,
+\begin{eqnarray*}
+P(k|\M_J) &=& \int_{\Theta} p(\theta|\M_J) \times P(k|\theta,\M_J) d \theta
+\\
+&=& \int_{\Theta} 2I(0.5<\theta<1.0) \times \binom{4}{4}\, \theta^4 \left(1-\theta\right)^0 d \theta \\
+&=& 2\int_{0.5}^{1.0} \theta^4 d \theta \\
+ &=& 2\left[\frac{\theta^5}{5} \right]_{0.5}^{1.0} 
+= \frac{2}{5} \left( 1^5 - 0.5^{5} \right)
+ = \frac{31}{80}
+\end{eqnarray*}
+
+Thus, the data are implied $\left(31/80\right) / \left(1/16\right) = 6.2$ times more strongly by $\M_J$ than by $\M_0$ (i.e., $BF_{J0}=6.2$).  Johnson concludes that these data afford only a modest amount of evidence---certainly not enough evidence to support a controversial and consequential recommendation---and decides to return to tallying quidditch-related nose fractures instead.
+
+\begin{figure*}[p] 
+\begin{center}
+\includegraphics[width=\textwidth%,viewport=97 374 550 697,bb=97 374 550 697,clip
+]{figs/bi0_etzvandekerckhove_fig7} \vspace{1ex}
+\caption{The structure of Johnson and Cuffe's models, which can be viewed as more complex (rotated) versions of earlier path diagrams. \textbf{Top:} The model space shows the contending models. In this case, both Johnson and Cuffe are comparing two models. The prior probabilities for the models are left unspecified. \textbf{Middle:} The parameter space shows what each model predicts about the true value of $\theta$ (i.e., each model's \textit{conditional prior distribution}). Johnson and Cuffe both use a point null model, which packs all of its mass into a single point (shown as the arrow spiking at $\theta=.5$). However, they have different background knowledge about \textit{felix felicis}, so their prior distributions for $\theta$ under their respective alternative model differ. Note that $p(\theta|M_C)$ is obtained from updating $p(\theta|M_J)$ with 11 additional \emph{felix felicis} successes. \textbf{Bottom:} The sample space shows what each model predicts about the data to be observed (i.e., each model's prior predictive distribution). The Bayes factor is formed by taking the ratio of the probability each model attached to the observed data, which was four wins in four coin tosses. Since the predictions from the null model are identical for Cuffe and Johnson, the difference in their Bayes factors is due to the higher marginal likelihood Cuffe's alternative model placed on the Irish captain winning all four coin tosses.}
+\label{fig:bi0:hier}
+\end{center}
+\end{figure*} 
+
+
+\subsubsection{Example~7b: ``Luck of the Irish --- Part 2''} \label{ex:irish2}
+As might be expected, the Irish quidditch controversy did not fail to pique interest throughout the wizarding world. Independently of the Ministry statistician, Barnabas Cuffe, Editor-in-Chief of the \emph{Daily Prophet}---England's premier magical newspaper---had noticed the same peculiar luck in the Irish team's pregame coin tosses.  In the editor's case, however, attention to the coin tosses was not a coincidence -- in fact, ``liquid luck'' had helped him win a few career-saving coin tosses in a mildly embarrassing part of his journalistic past.
+
+Cuffe's experience with \emph{felix felicis} is straightforward: on eleven different occasions did he sip the potion just before a toin coss would decide which of two journalistic leads he would pursue that day -- his colleague would pursue the other.  He recalls clearly that on each of the eleven occasions, his leads carried him in the thick of dramatic, newsworthy events while his colleague's leads turned out dead ends. Cuffe was promoted; his colleague dismissed.
+
+As it happens, Cuffe is an accomplished statistician, and he reasons in exactly the same way as Angelina Johnson (the junior statistician at the Ministry). If there is no cheating the winning probability should be 50\% each time ($\M_0: \theta = 0.5$).  If there \emph{is} cheating, the winning probability should be higher.  In contrast to Johnson, however, Cuffe has a good idea how much higher the winning probability $\theta$ will be with \emph{felix felicis}: before evaluating the Irish captain's luck he can estimate $\theta$ from additional information $y$ that only he possesses.
+
+Cuffe starts by writing down Equation~\ref{eq:bayesrule3} and filling in the quantities on the right hand side.  Among these is the prior density $p(\theta)$, which gives the density at each possible value of $\theta$ \emph{before considering his own eleven winning coin tosses $y$}.  A reasonable place to start (as before) is that all values between $0.5$ and $1.0$ are equally plausible: $p(\theta) = 2I(0.5<\theta<1.0) = 2I_\theta$ (where we introduce $I_\theta$ as a shorthand for $I(0.5<\theta<1.0)$, the appropriate indicator function).  He also uses the same binomial likelihood function as Johnson, hence,
+\begin{eqnarray*}
+p(\theta|y) &=& \frac{p(\theta) \times p(y|\theta)}{\int_{\Theta}p(\theta) \times p(y|\theta)d\theta}\\
+&=& \frac{2I_\theta \times \binom{11}{11}\theta^{11}(1-\theta)^0}{\int_{\Theta}2I_\theta \times \binom{11}{11}\theta^{11}(1-\theta)^0d\theta}
+= \frac{2I_\theta \times\theta^{11}}{2\int_{0.5}^{1.0} \theta^{11} d\theta}\\
+&=& \frac{I_\theta \times\theta^{11}}{\left[\frac{\theta^{12}}{12}\right]_{0.5}^{1.0}} = \frac{I_\theta \times\theta^{11}}{\frac{1}{12}\left(1.0^{12} - 0.5^{12}\right)}
+\approx 12\theta^{11}I_\theta
+\end{eqnarray*}
+
+This calculation\footnote{Note that here and below, we make use of a convenient approximation: $0.5^k \approx 0$ for large values of $k$.  Making the calculation exact is not difficult but requires a rather unpleasant amount of space. Also note that the indicator function from the prior density carries over to the posterior density.} yields Cuffe's \emph{posterior density} of the winning probability $\theta$, which captures his knowledge and uncertainty of the value of $\theta$ under luck doping. {The shape of this density function is depicted in the right half of Figure~\ref{fig:bi0:hier}.}  Crucially, Cuffe can use this knowledge to perform the same analysis as the Ministry statistician with only one difference: \textbf{yesterday's posterior $p(\theta|y)$ is today's prior $p(\theta|\M_C)$}. The fact that the latter notation of the prior does not include mention of $y$ serves to illustrate that densities and probabilities are often implicitly conditional on (sometimes informal) background knowledge.  Note, for instance, that the entire calculation above assumes that \emph{felix felicis} was taken, but this is not made explicit in the mathematical notation.
+
+Unknowingly repeating Johnson's calculation, Cuffe finds that the probability of the Irish team captain's $k=4$ winning coin tosses assuming no luck doping is again $p(k|\M_0) = 1/16$.  His calculation for the probability of the $k=4$ wins assuming luck doping is
+\begin{eqnarray*}
+P(k|\M_C) &=& \int_{\Theta} p(\theta|\M_C)\times p(k|\theta,\M_C) d \theta
+\\
+&\approx& \int_{0.5}^{1.0} 12\theta^{11}I_\theta \times \binom{4}{4} \theta^4 \left(1-\theta\right)^0 d \theta \\
+ &=& 12 \left[\frac{\theta^{16}}{16} \right]_{0.5}^{1.0}
+ = \frac{12}{16} \left(1^{16} - 0.5^{16} \right)
+ \approx \frac{12}{16}
+\end{eqnarray*}
+To complete his analysis, Cuffe takes the ratio of marginal likelihoods, $$BF_{C0}=P(k|\M_C)/P(k|\M_0) \approx 12,$$ which is strong---but not very strong---evidence in favor of Cuffe's luck doping model.  
+
+Inspired partly by the evidence and partly by the recklessness that follows from years of \emph{felix felicis} abuse, editor Cuffe decides to publish an elaborate expos\'e condemning both the Irish quidditch team for cheating and the Ministry of Magic for failing to act on strong evidence of misconduct.
+
+\paragraph{Discussion} This final, two-part example served mostly to illustrate the effects of prior knowledge on inference. {This is somewhat in contrast to Example~\ref{ex:elf}, where the prior information was overwhelmed by the data.} In the two scenarios {here,} the Ministry junior statistician and the \textit{Prophet} editor are both evaluating evidence that discriminates between two models. Both consider a ``nil model'' in which all parameters are known (the fairness of a coin implies that the parameter $\theta$ must be 0.5), but they critically differ in their definition of the alternative model. The Ministry statistician, having no particular knowledge of the luck doping potion, considers all better-than-chance values equally plausible, whereas the \textit{Prophet} editor can quantify and insert relevant prior information that specifies the expected effects of the drug in question to greater precision. 
+
+As illustrated in the bottom row of Figure~\ref{fig:bi0:hier}, these three models (the chance model $\M_0$, the Ministry model $\M_J$, and the \textit{Prophet} model $\M_C$) make distinct predictions: $\M_0$ predicts a distribution of Irish coin toss wins that is symmetric about $k=2$; $\M_J$ predicts a right-leaning distribution with a greater probability of four Irish wins; and $\M_C$ predicts an even greater such probability. More specifically, the marginal likelihoods are $P(k|\M_0) =  5/80$, $P(k|\M_J) = 31/80$, and $P(k|\M_C) \approx 60/80$, and the Bayes factor between any two of these models is given by forming the appropriate ratio.
+
+This example illustrates a general property in Bayesian model comparison: A model that makes precise predictions can be confirmed to a much stronger extent than a model that makes vague predictions, while at the same time the precision of its predictions makes it easier to disconfirm. 
+The reason Cuffe was able to obtain a higher Bayes factor than Johnson is because his alternative model made much more precise predictions; $\M_C$ packed three-quarters of its prior predictive distribution into $k=4$, whereas $\M_J$ spread its probability more broadly among the potential outcomes. Since Cuffe's precise prediction was correct, he was rewarded with a larger Bayes factor. However, Cuffe's prediction was risky: if the Irish captain had won any fewer than all four coin tosses, $\M_0$ would have been supported over $\M_C$. In contrast, the Bayes factor would still favor $\M_J$ when $k=3$ because Johnson's model is more conservative in its predictions. In sum, the ability to incorporate meaningful theoretical information in the form of a prior distribution allows for more informed predictions and hence more efficient inferences \cite{LeeSI}. 
+
+\section{Broader appeal and advantages of Bayesian inference}
+\epigraph{The Bayesian approach is a common sense approach. It is simply a set of techniques for orderly expression and revision of your opinions with due regard for internal consistency among their various aspects and for the data.}{W.~\citeA{EdwardsEtAl1963}}
+
+In our opinion, the greatest theoretical advantage of Bayesian inference is that it unifies all statistical practices within the consistent formal system of probability theory.  Indeed, the unifying framework of Bayesian inference is so uniquely well-suited for scientific inference that these authors see the two as synonymous. Inference is the process of combining multiple sources of information into one, and the rules for formally combining information derive from two simple rules of probability. Inference can be as straightforward as determining the event of interest (in our notation, usually $\M$ or $\theta$) and the relevant data and then exploring what the sum and product rules tell us about their relationship. 
+
+As we have illustrated, common statistical applications such as parameter estimation and hypothesis testing naturally emerge from the sum and product rules. However, these rules allow us to do much more, such as make precise quantitative predictions about future data. This intuitive way of making predictions can be particularly informative in discussions about what one should expect in future studies -- it is perhaps especially useful for predicting and evaluating the outcome of a replication attempt, since we can derive a set of new predictions after accounting for the results of the original study \cite<e.g.,>{VerhagenWagenmakers2014,WagenmakersEtAlBathinginpress}.
+
+The practical advantages of using probability theory as the basis of scientific and statistical inference are legion. One of the most appealing in our opinion is it allows us to make probabilistic statements about the quantities of actual interest, such as ``There is a 90\% probability the participants are guessing,'' or ``The probability is .5 that the population mean is negative.'' It also allows us to construct hierarchical models that more accurately capture the structure of our data, which often includes modeling theoretically-meaningful variability at the participant, task, item, or stimulus level \cite{GelmanHill2007,LeeWagenmakersBayesBook,Rouder2016hierarch}.
+
+Bayesian inference also gracefully handles so-called \textit{nuisance parameters.} In most of our present examples there has been only a single quantity of interest -- in order to help keep the examples simple and easy to follow. In real applications, however, there are typically many parameters in a statistical model, some of which we care about and some of which we do not. The latter are called nuisance parameters because we have little interest in them: we only estimate them out of necessity. For example, if we were estimating the mean of a normal distribution (as in Example~\ref{ex:muggle}) and did not know the population standard deviation, then we would have to assign it a prior density, such that the overall prior density would be of the form $p(\mu,\sigma)$; after collecting data $X$, the posterior density would be of the form $p(\mu,\sigma|X)$. Since we are generally only interested in the parameter $\mu$, estimating $\sigma$ out of necessity, $\sigma$ is considered a nuisance parameter. To make inferences about $\mu$ we merely integrate out $\sigma$ from the posterior density using the sum rule: $p(\mu|X)= \int_{\Sigma}p(\mu,\sigma|X)d\sigma$, from which we can do inference about $\mu$. Similarly, in Examples~\ref{ex:irish} and~\ref{ex:irish2}b, the exact win rate from a luck-doped coin toss is not of primary interest, only whether the coin tossed in the four games was plausibly fair or not. Here, the bias parameter of the coin can be seen as a nuisance parameter. Dealing with nuisance parameters in a principled way is a unique advantage of the Bayesian framework: except for certain special cases, frequentist inference can become paralyzed by nuisance parameters.
+
+The ability of Bayesian inference to deal with nuisance parameters also allows it to flexibly handle one of the biggest statistical challenges for data analysts: situations in which the assumptions of the statistical model regarding the data are badly violated. For example, one of the most common assumptions violated is that of normality (e.g., due to the presence of many outliers). In technical terms, this means that we may not think the normal likelihood function adequately characterizes the data-generating mechanism for the inference problem at hand. In Bayesian inference the choice of likelihood is important because, as we have seen in the estimation examples above, with even moderate samples sizes the likelihood quickly begins to dominate the prior densities. To resolve this issue a Bayesian can construct two models: one that uses a normal likelihood function (model $\M_N$), and one that uses a likelihood function with wider tails (model $\M_W$), such as a $t$ distribution with few degrees of freedom. After collecting data we then have a posterior distribution for the parameters of interest for each model, $p(\theta|X,\M_N)$ and $p(\theta|X,\M_W)$. If we assign prior probabilities to these two models (we emphasize that a ``model'' consists of both a prior distribution for the parameters and a likelihood function for the data), $P(\M_N)$ and $P(\M_W)$, we can calculate their posterior probabilities $P(\M_N|X)$ and $P(\M_W|X)$. We are then in a position to use the sum rule to marginalize over the different models (as Dr.\ Bones did with the various prior densities in Example~\ref{ex:elf}), allowing us to find the \textit{model-averaged} posterior density for $\theta$, $$p(\theta|X)= P(\M_N|X)p(\theta|X,\M_N)+P(\M_W|X)p(\theta|X,\M_W).$$
+
+Note that model averaging is in a sense the flip-side of model selection: In model selection, the identity of the model is central while the \textit{model parameters} are sometimes seen as nuisance variables to be integrated away. By contrast, in the previous equation the \textit{model identities} are treated as nuisance variables while the shared model parameters remain central \cite<see>{Roberts1965,EtzOrigin}. The flexibility to perform model averaging across any variable we care to name \cite<e.g.>{HoetingEtAl1999,link2009bayes} is a unique advantage of Bayesian inference.
+
+Finally, Bayesian analysis allows for immense freedom in data collection because it respects the \textit{likelihood principle} {\cite{BergerWolpert1988}}. The likelihood principle states that the likelihood function of the data contains all of the information relevant to the evaluation of statistical evidence. What this implies is that other properties of the data or experiment that do not factor into the likelihood function are \textit{irrelevant} to the statistical inference based on the data \cite{Lindley1993,Royall1997}. 
+Adherence to the likelihood principle means that one is free to do analyses without needing to adhere to rigid sampling plans, or even have any plan at all \cite{Rouder2014PBR}. Note that we did not consider the sampling plan in any of our examples above, and none of the inferences we made would have changed if we had. Within a Bayesian analysis, ``It is entirely appropriate to collect data until a point has been proven or disproven, or until the data collector runs out of time, money, or patience'' \cite[p.\ 193]{EdwardsEtAl1963}. 
+
+\section{Conclusion}
+\epigraph{[W]e believe that Bayes' theorem is not only useful, but in fact leads to the \emph{only} correct formulas for solving a large number of our cryptanalytic problems.}{F.~T.~\citeA{Leahy1960} [emphasis original]}
+
+The goal of this introduction has been to familiarize the reader with the fundamental principles of Bayesian inference. {Other contributions in this special issue \cite{DienesSI,KruschkeSI2} focus on why and how Bayesian methods are preferable to the methods proposed in the \textit{New Statistics} \cite{Cumming2014}.} The Bayesian approach to all inferential problems follows from two simple formal laws: the sum and product rules of probability. Taken together and in their various forms, these two rules make up the entirety of Bayesian inference -- from testing simple hypotheses and estimating parameters, to comparing complex models and producing quantitative predictions.
+
+The Bayesian method is \rem{unparalleled}{unmatched} in its flexibility, is rooted in relatively straightforward calculus, and uniquely allows researchers to make statements about the relative probability of theories and parameters -- and to update those statements with more data. That is, the laws of probability show us how our scientific opinions can evolve to cohere with the results of our empirical investigations. For these reasons, we recommend {that social scientists adopt} \rem{the adoption of} Bayesian methods {rather than the \textit{New Statistics}} \rem{in the social sciences}, and we hope that the present introduction will contribute to deterring the field from taking an evolutionary step in the wrong direction. 
+
+\section*{Acknowledgments}
+The authors would like to thank J.~P.\ de~Ruiter, Stephan Franke, and Zita Oravecz for helpful comments, Brian Clayton for the Illustration, and J.~K.\ Rowling for the Harry Potter universe. The authors were supported by NSF grants \#1230118 and \#1534472 from the Methods, Measurements, and Statistics panel and by John Templeton Foundation grant \#48192. AE was further supported by the National Science Foundation Graduate Research Fellowship Program (\#DGE-1321846). 
+
+\bibliographystyle{apacite}
+\bibliography{bi0}
+
+\onecolumn
+\section*{Appendix: Computer code for \rem{Example~6}{``The measure of an elf''}} \label{app:elf}
+
+\lstdefinestyle{MyR}{ %
+  language=R,                     % the language of the code
+  basicstyle=\footnotesize\ttfamily,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=n,                   % sets the caption-position to nowhere
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  keywordstyle=\color{blue},      % keyword style
+  commentstyle=\color{teal},      % comment style
+  stringstyle=\color{violet},     % string literal style
+  escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,...}            % if you want to add more keywords to the set
+}
+\lstdefinestyle{MyMATLAB}{ %
+  language=MATLAB,%
+  identifierstyle=\color{black},%
+  numberstyle={\tiny \color{black}},% size of the numbers
+  basicstyle=\footnotesize\ttfamily,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=n,                   % sets the caption-position to nowhere
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  keywordstyle=\color{blue},      % keyword style
+  commentstyle=\color{teal},      % comment style
+  stringstyle=\color{violet},     % string literal style
+  escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,...}            % if you want to add more keywords to the set
+}
+
+\begin{multicols}{2}
+\lstinputlisting[style=MyMATLAB]{code/bi0_elf.m}
+\vfill\columnbreak
+\lstinputlisting[style=MyR]{code/bi0_elf.R} 
+\end{multicols}
+\noindent MATLAB/Octave users who do not have access to the Statistics Toolbox can add on line 6:
+
+{\footnotesize\ttfamily normpdf = @(x,m,s) exp(-((x-m)./s).\^{}2/2)./sqrt(2.*s.\^{}2.*pi);}
+
+

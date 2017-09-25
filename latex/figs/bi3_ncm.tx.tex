@@ -1,0 +1,111 @@
+\begin{tikzpicture}[xscale=0.90,yscale=0.90]
+\tikzstyle{arrow}=[->,>=latex,thick]
+\tikzstyle{dash}=[>=latex,thick,dashed]
+\tikzstyle{node}=[fill,circle,scale=0.5]
+\tikzstyle{check}=[fill=white,circle,draw]
+\tikzstyle{outcome}=[fill=white,circle]
+\tikzstyle{label}=[midway,fill=white,draw]
+\tikzstyle{offlabel}=[pos=0.75,fill=white,draw]
+\tikzstyle{mdlab}=[fill=lightgray,draw]
+% Dimensions (MODIFIABLES)
+\def\LevelsDistance{1.2}
+\def\DistanceOutcomeDistance{1.2}
+% Dimensions calculées (NON MODIFIABLES)
+\def\LevelA{(-1.50)*\LevelsDistance}
+\def\LevelB{(-2.25)*\LevelsDistance}
+\def\LevelC{(-3.25)*\LevelsDistance}
+\def\LevelD{(-4.50)*\LevelsDistance}
+\def\LevelE{(-6.40)*\LevelsDistance}
+\def\LevelF{(-6.75)*\LevelsDistance}
+\def\LevelG{(-7.50)*\LevelsDistance}
+\def\OutcomeDistance{(1)*\DistanceOutcomeDistance}
+% nodes (MODIFIABLES : Styles et Coefficients d'OutcomeDistance)
+\node[node]    (R)     at ({( 5.5)*\OutcomeDistance},{\LevelA}) {$$};
+\node[node]    (Ra)    at ({( 2.5)*\OutcomeDistance},{\LevelB}) {$$};
+\node[node]    (Raa)   at ({( 0.5)*\OutcomeDistance},{\LevelC}) {$$};
+\node[outcome] (Raaa)  at ({( 0.0)*\OutcomeDistance},{\LevelE}) {$$};
+\node[outcome] (Raab)  at ({( 1.0)*\OutcomeDistance},{\LevelE}) {$$};
+\node[node]    (Rab)   at ({( 3.5)*\OutcomeDistance},{\LevelC}) {$$};
+\node[node]    (Raba)  at ({( 2.5)*\OutcomeDistance},{\LevelD}) {$$};
+\node[outcome] (Rabaa) at ({( 2.0)*\OutcomeDistance},{\LevelE}) {$$};
+\node[outcome] (Rabab) at ({( 3.0)*\OutcomeDistance},{\LevelE}) {$$};
+\node[node]    (Rabb)  at ({( 4.5)*\OutcomeDistance},{\LevelD}) {$$};
+\node[outcome] (Rabba) at ({( 4.0)*\OutcomeDistance},{\LevelE}) {$$};
+\node[outcome] (Rabbb) at ({( 5.0)*\OutcomeDistance},{\LevelE}) {$$};
+\node[node]    (Rb)    at ({( 8.5)*\OutcomeDistance},{\LevelB}) {$$};
+\node[node]    (Rba)   at ({( 6.5)*\OutcomeDistance},{\LevelC}) {$$};
+\node[outcome] (Rbaa)  at ({( 6.0)*\OutcomeDistance},{\LevelE}) {$$};
+\node[outcome] (Rbab)  at ({( 7.0)*\OutcomeDistance},{\LevelE}) {$$};
+\node[node]    (Rbb)   at ({( 9.5)*\OutcomeDistance},{\LevelC}) {$$};
+\node[node]    (Rbba)  at ({( 8.5)*\OutcomeDistance},{\LevelD}) {$$};
+\node[outcome] (Rbbaa) at ({( 8.0)*\OutcomeDistance},{\LevelE}) {$$};
+\node[outcome] (Rbbab) at ({( 9.0)*\OutcomeDistance},{\LevelE}) {$$};
+\node[node]    (Rbbb)  at ({(10.5)*\OutcomeDistance},{\LevelD}) {$$};
+\node[outcome] (Rbbba) at ({(10.0)*\OutcomeDistance},{\LevelE}) {$$};
+\node[outcome] (Rbbbb) at ({(11.0)*\OutcomeDistance},{\LevelE}) {$$};
+
+\node[] at (-1.75,{\LevelF}) {Phase~III};
+\node[check] (th) at ({( 0)*\OutcomeDistance},{\LevelF}) {\check};
+\node[check] (th) at ({( 1)*\OutcomeDistance},{\LevelF}) {\check};
+\node[check] (th) at ({( 2)*\OutcomeDistance},{\LevelF}) {\check};
+\node[check] (th) at ({( 3)*\OutcomeDistance},{\LevelF}) {\check};
+\node[check] (th) at ({( 4)*\OutcomeDistance},{\LevelF}) {\check};
+\node[check] (th) at ({( 5)*\OutcomeDistance},{\LevelF}) {\check};
+\node[check] (th) at ({( 6)*\OutcomeDistance},{\LevelF}) {\cross};
+\node[check] (th) at ({( 7)*\OutcomeDistance},{\LevelF}) {\cross};
+\node[check] (th) at ({( 8)*\OutcomeDistance},{\LevelF}) {\check};
+\node[check] (th) at ({( 9)*\OutcomeDistance},{\LevelF}) {\check};
+\node[check] (th) at ({(10)*\OutcomeDistance},{\LevelF}) {\cross};
+\node[check] (th) at ({(11)*\OutcomeDistance},{\LevelF}) {\cross};
+
+\node[] at (-1.75,{\LevelG}) {Phase~IV};
+\node[check] (th) at ({( 0)*\OutcomeDistance},{\LevelG}) {\check};
+\node[check] (th) at ({( 1)*\OutcomeDistance},{\LevelG}) {\check};
+\node[check] (th) at ({( 2)*\OutcomeDistance},{\LevelG}) {\check};
+\node[check] (th) at ({( 3)*\OutcomeDistance},{\LevelG}) {\cross};
+\node[check] (th) at ({( 4)*\OutcomeDistance},{\LevelG}) {\check};
+\node[check] (th) at ({( 5)*\OutcomeDistance},{\LevelG}) {\cross};
+\node[check] (th) at ({( 6)*\OutcomeDistance},{\LevelG}) {\check};
+\node[check] (th) at ({( 7)*\OutcomeDistance},{\LevelG}) {\cross};
+\node[check] (th) at ({( 8)*\OutcomeDistance},{\LevelG}) {\check};
+\node[check] (th) at ({( 9)*\OutcomeDistance},{\LevelG}) {\cross};
+\node[check] (th) at ({(10)*\OutcomeDistance},{\LevelG}) {\check};
+\node[check] (th) at ({(11)*\OutcomeDistance},{\LevelG}) {\cross};
+
+% Arcs (MODIFIABLES : Styles)
+\draw[arrow] (R)--(Ra) node[label] (pp) {$p$};
+\draw[arrow] (Ra)--(Raa) node[label] (cc) {$c$};
+\draw[arrow] (Raa)--(Raaa) node[offlabel] (qq) {$q$};
+\draw[arrow] (Raa)--(Raab) node[offlabel] {$1-q$};
+\draw[arrow] (Ra)--(Rab) node[label] {$1-c$};
+\draw[arrow] (Rab)--(Raba) node[label] (qqq) {$q$};
+\draw[arrow] (Raba)--(Rabaa) node[label] {$\frac{1}{3}$};
+\draw[arrow] (Raba)--(Rabab) node[label] {$\frac{2}{3}$};
+\draw[arrow] (Rab)--(Rabb) node[label] {$1-q$};
+\draw[arrow] (Rabb)--(Rabba) node[label] {$\frac{1}{3}$};
+\draw[arrow] (Rabb)--(Rabbb) node[label] {$\frac{2}{3}$};
+\draw[arrow] (R)--(Rb) node[label] {$1-p$};
+\draw[arrow] (Rb)--(Rba) node[label] {$q$};
+\draw[arrow] (Rba)--(Rbaa) node[offlabel] {$\frac{1}{3}$};
+\draw[arrow] (Rba)--(Rbab) node[offlabel] {$\frac{2}{3}$};
+\draw[arrow] (Rb)--(Rbb) node[label] {$1-q$};
+\draw[arrow] (Rbb)--(Rbba) node[label] {$\frac{1}{2}$};
+\draw[arrow] (Rbba)--(Rbbaa) node[label] {$\frac{1}{3}$};
+\draw[arrow] (Rbba)--(Rbbab) node[label] {$\frac{2}{3}$};
+\draw[arrow] (Rbb)--(Rbbb) node[label] (gg) {$\frac{1}{2}$};
+\draw[arrow] (Rbbb)--(Rbbba) node[label] {$\frac{1}{3}$};
+\draw[arrow] (Rbbb)--(Rbbbb) node[label] (ggg) {$\frac{2}{3}$};
+
+\node[mdlab] (txt1) at (1.5,{\LevelA}) {Traffic light encoded?};
+\node[mdlab] (txt2) at (0,{\LevelB}) {Color encoded?};
+\node[mdlab] (txt3) at (-1,{\LevelD}) {Stop sign encoded?};
+%\node[mdlab] (txt4) at (0,{\LevelD}) {Traffic light guessed wrong?};
+%\node[mdlab] (txt5) at (0,{\LevelE}) {Color guessed wrong?};
+
+\draw[dash] (txt1)--(pp);
+\draw[dash] (txt2)--(cc);
+\draw[dash] (txt3)--(qq);
+%\draw[dash] (txt4)--(gg);
+%\draw[dash] (txt5)--(ggg);
+
+\end{tikzpicture}

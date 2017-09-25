@@ -1,0 +1,179 @@
+\usetikzlibrary{decorations.pathmorphing,backgrounds,fit,calc,through,arrows,shapes,trees,positioning,matrix,chains}
+\tikzset {crossline/.style={opacity=.15,line width=4.5mm,line cap=round,color=#1},
+	method/.style={opacity=.15,fill,rounded corners,color=blue},
+	manifest/.style={rectangle,draw,inner sep=0.15em,minimum size=2.5em},
+	latent/.style={circle,draw,inner sep=0.15em,minimum size=2.7em},
+	error/.style={circle,draw,inner sep=0.15em,minimum size=2em},
+	every loop/.style={min distance=1em,in=70,out=110,looseness=3.5},
+	highlight/.style={rectangle,rounded corners,fill=red!15,draw,fill opacity=0.5,thick,inner sep=0pt}
+}
+
+
+\begin{tikzpicture}
+[latent/.style={circle,draw=black!50,fill=white!20,thick,
+                inner sep=0pt, minimum width=18mm, 
+                minimum height=18mm},
+ manifest/.style={rectangle,draw=black!50,fill=white!20,thick,
+                inner sep=0pt,minimum width=10mm, minimum height=10mm},
+ covarite/.style={rectangle,draw=black!50,fill=white!20,thick,
+                inner sep=2pt,minimum width=15mm, minimum height=12mm},
+ error/.style={circle,draw=black!50,fill=white!20,thick,
+                inner sep=0pt, minimum width=8mm},
+ post/.style={->,shorten >=1pt,>=stealth',semithick},
+ slingdash/.style={<->,shorten >=1pt,>=stealth',shorten
+   <=1pt,>=stealth',auto, distance=9mm,dashed,semithick},
+ sling/.style={<->,shorten >=1pt,>=stealth',shorten <=1pt,>=stealth',auto,distance=10mm,semithick},
+ errorsling/.style={<->,shorten >=1pt,>=stealth',shorten <=1pt,>=stealth',auto,distance=5mm,semithick}]
+
+
+
+%position objects.
+\node[manifest] (AR1) at (-3,3) {AR1};
+\node[manifest] (AR2) at (-1.5,3) {AR2};
+\node[manifest] (AR3) at (0,3) {AR3};
+\node[manifest] (AR4) at (1.5,3) {AR4};
+\node[manifest] (AR5) at (3,3) {AR5};
+
+\node[manifest] (AR6) at (5,3) {AR6};
+\node[manifest] (AR7) at (6.5,3) {AR7};
+\node[manifest] (AR8) at (8,3) {AR8};
+\node[manifest] (AR9) at (9.5,3) {AR9};
+\node[manifest] (AR10) at (11,3) {AR10};
+
+\node[manifest] (C1) at (1,-9) {C1};
+\node[manifest] (C2) at (2.5,-9) {C2};
+\node[manifest] (C3) at (4,-9) {C3};
+\node[manifest] (C4) at (5.5,-9) {C4};
+\node[manifest] (C5) at (7,-9) {C5};
+
+\node[covarite] (Frame) at (-4,-3) {Frame};
+\node[covarite] (Num) at (4,-3) {Num};
+\node[covarite] (Frame*Num) at (12,-3) {Frame*Num};
+
+\node[latent] (Riskless) at (0,0) {Riskless};
+\node[latent] (Risky) at (8,0) {Risky};
+\node[latent] (Choice) at (4,-6) {Choice};
+\node[latent] (Riskless*Num) at (0,-3) {\scriptsize{Riskless*Num}};
+\node[latent] (Risky*Num) at (8,-3) {\scriptsize{Risky*Num}};
+
+\node[error] (E1) at (-3,5) {E1};
+\node[error] (E2) at (-1.5,5) {E2};
+\node[error] (E3) at (0,5) {E3};
+\node[error] (E4) at (1.5,5) {E4};
+\node[error] (E5) at (3,5) {E5};
+
+\node[error] (E6) at (5,5) {E6};
+\node[error] (E7) at (6.5,5) {E7};
+\node[error] (E8) at (8,5) {E8};
+\node[error] (E9) at (9.5,5) {E9};
+\node[error] (E10) at (11,5) {E10};
+
+\node[error] (E11) at (1,-11) {E11};
+\node[error] (E12) at (2.5,-11) {E12};
+\node[error] (E13) at (4,-11) {E13};
+\node[error] (E14) at (5.5,-11) {E14};
+\node[error] (E15) at (7,-11) {E15};
+
+%arrows, slings and texts
+\node[latent] (Riskless) at (0,0) {Riskless}
+   edge [post] node[above=0.01cm,text width=1.5cm]{\scriptsize{$\lambda_{11}$}} (AR1)
+   edge [post] node[above=0.1cm,text width=1.2cm]{\scriptsize{$\lambda_{21}$}} (AR2)
+   edge [post] node[above=0.1cm,text width=0.9cm]{\scriptsize{$\lambda_{31}$}} (AR3)
+   edge [post] node[above=0.1cm,text width=0.6cm]{\scriptsize{$\lambda_{41}$}} (AR4)
+   edge [post] node[above=0.1cm,text width=0.3cm]{\scriptsize{$\lambda_{51}$}} (AR5)
+   edge [post] node[below right=0.8cm,text width=0.2cm]{\scriptsize{$b_{13}$}} (Choice)
+  (Riskless.30) edge [sling,bend left=60]
+   node[auto,swap]{\scriptsize{$\phi_{12}$}}(Risky.150)
+  (Riskless.140) edge [sling,bend right=65]node[above left=0.05mm,text width=0.1cm]{\scriptsize{1}}(Riskless.210);
+
+\node[latent] (Risky) at (8,0) {Risky}
+   edge [post] node[above=0.01cm,text width=1.5cm]{\scriptsize{$\lambda_{62}$}} (AR6)
+   edge [post] node[above=0.1cm,text width=1.3cm]{\scriptsize{$\lambda_{72}$}} (AR7)
+   edge [post] node[above=0.1cm,text width=0.9cm]{\scriptsize{$\lambda_{82}$}} (AR8)
+   edge [post] node[above=0.1cm,text width=0.7cm]{\scriptsize{$\lambda_{92}$}} (AR9)
+   edge [post] node[above=0.1cm,text width=0.8cm]{\scriptsize{$\lambda_{10,2}$}} (AR10)
+   edge [post] node[below left= 0.7cm,text
+     width=0.35cm]{\scriptsize{$b_{23}$}} (Choice)
+   (Risky.40) edge [sling,bend left=65]node[above right=0.05mm,text width=0.1cm]{\scriptsize{1}}(Risky.330)
+;
+   
+\node[latent] (Riskless*Num) at (0,-3) {\scriptsize{Riskless*Num}}
+   edge [post] node[left=0.05cm,text width=0.5cm]{\scriptsize{$\xi_{315}$}} (Choice)
+   ;
+
+\node[latent] (Risky*Num) at (8,-3) {\scriptsize{Risky*Num}}
+   edge [post] node[right=0.1cm,text width=1.5cm]{\scriptsize{$\xi_{325}$}} (Choice)
+   ;
+  
+   
+\node[latent] (Choice) at (4,-6) {Choice}
+   edge [post] node[above=-0.23cm,text width=1.4cm]{\scriptsize{$\lambda_{11,3}$}} (C1)
+   edge [post] node[above=-0.2cm,text width=1.3cm]{\scriptsize{$\lambda_{12,3}$}} (C2)
+   edge [post] node[above=-0.2cm,text width=1.3cm]{\scriptsize{$\lambda_{13,3}$}} (C3)
+   edge [post] node[above=-0.25cm,text width=1.4cm]{\scriptsize{$\lambda_{14,3}$}} (C4)
+   edge [post] node[above=-0.35cm,text width=1.3cm]{\scriptsize{$\lambda_{15,3}$}} (C5)
+   edge [sling,bend left=65]node[above left=0.05mm,text width=0.1cm]{\scriptsize{1}}(Choice.160);
+   
+\node[covarite] (Frame) at (-4,-3) {Frame}
+   edge [post] node[above=0.01cm,text width=0.5cm]{\scriptsize{$b_{41}$}} (Riskless)
+   edge [post] node[right=0.6cm,text width=0.5cm]{\scriptsize{$b_{42}$}} (Risky)
+   edge [post] node[below=0.01cm,text width=0.5cm]{\scriptsize{$b_{43}$}} (Choice);
+   
+\node[covarite] (Frame*Num) at (12,-3) {Frame*Num}
+   edge [post] node[left=0.6cm,text width=0.5cm]{\scriptsize{$b_{61}$}} (Riskless)
+   edge [post] node[above=0.01cm,text width=0.5cm]{\scriptsize{$b_{62}$}} (Risky)
+   edge [post] node[below=0.01cm,text width=0.5cm]{\scriptsize{$b_{63}$}} (Choice);
+   
+\node[covarite] (Num) at (4,-3) {Num}
+   edge [post] node[above =0.3cm,text width=0.5cm]{\scriptsize{$b_{51}$}} (Riskless)
+   edge [post] node[above=0.3cm,text width=0.01cm]{\scriptsize{$b_{52}$}} (Risky)
+   edge [post] node[left=0.05cm, text width=0.25cm]{\scriptsize{$b_{53}$}} (Choice)
+  ;
+   
+\node[error] (E1) at (-3,5) {E1}
+   edge [post] node[auto,swap]{\small{1}}(AR1)
+   edge [errorsling, bend right= 80]node[above left=0.05mm,text width=0.1cm]{\scriptsize{$\psi_{1}$}} (E1.130);   
+\node[error] (E2) at (-1.5,5) {E2}
+   edge [post] node[auto,swap]{\small{1}}(AR2)
+   edge [errorsling, bend right= 80]node[above left=0.05mm,text width=0.1cm]{\scriptsize{$\psi_{2}$}} (E2.130);
+\node[error] (E3) at (0,5) {E3}
+   edge [post] node[auto,swap]{\small{1}}(AR3)
+   edge [errorsling, bend right= 80]node[above left=0.05mm,text width=0.1cm]{\scriptsize{$\psi_{3}$}} (E3.130);
+\node[error] (E4) at (1.5,5) {E4}
+   edge [post] node[auto,swap]{\small{1}}(AR4)
+   edge [errorsling, bend right= 80]node[above left=0.05mm,text width=0.1cm]{\scriptsize{$\psi_{4}$}} (E4.130);
+\node[error] (E5) at (3,5) {E5}
+   edge [post] node[auto,swap]{\small{1}}(AR5)
+   edge [errorsling, bend right= 80]node[above left=0.05mm,text width=0.1cm]{\scriptsize{$\psi_{5}$}} (E5.130);
+\node[error] (E6) at (5,5) {E6}
+   edge [post] node[auto,swap]{\small{1}}(AR6)
+   edge [errorsling, bend right= 80]node[above left=0.05mm,text width=0.1cm]{\scriptsize{$\psi_{6}$}} (E6.130);
+\node[error] (E7) at (6.5,5) {E7}
+   edge [post] node[auto,swap]{\small{1}}(AR7)
+   edge [errorsling, bend right= 80]node[above left=0.05mm,text width=0.1cm]{\scriptsize{$\psi_{7}$}} (E7.130);
+\node[error] (E8) at (8,5) {E8}
+   edge [post] node[auto,swap]{\small{1}}(AR8)
+   edge [errorsling, bend right= 80]node[above left=0.05mm,text width=0.1cm]{\scriptsize{$\psi_{8}$}} (E8.130);
+\node[error] (E9) at (9.5,5) {E9}
+   edge [post] node[auto,swap]{\small{1}}(AR9)
+   edge [errorsling, bend right= 80]node[above left=0.05mm,text width=0.1cm]{\scriptsize{$\psi_{9}$}} (E9.130);
+\node[error] (E10) at (11,5) {E10}
+   edge [post] node[auto,swap]{\small{1}}(AR10)
+   edge [errorsling, bend right= 80]node[above left=0.05mm,text width=0.1cm]{\scriptsize{$\psi_{10}$}} (E10.130);
+\node[error] (E11) at (1,-11) {E11}
+   edge [post] node[auto,swap]{\small{1}}(C1)
+   edge [errorsling, bend right= 80]node[below left=0.05mm,text width=0.05cm]{\scriptsize{$\psi_{11}$}} (E11.310);
+\node[error] (E12) at (2.5,-11) {E12}
+   edge [post] node[auto,swap]{\small{1}}(C2)
+   edge [errorsling, bend right= 80]node[below left=0.05mm,text width=0.05cm]{\scriptsize{$\psi_{12}$}} (E12.310);
+\node[error] (E13) at (4,-11) {E13}
+   edge [post] node[auto,swap]{\small{1}}(C3)
+   edge [errorsling, bend right= 80]node[below left=0.05mm,text width=0.05cm]{\scriptsize{$\psi_{13}$}} (E13.310);
+\node[error] (E14) at (5.5,-11) {E14}
+   edge [post] node[auto,swap]{\small{1}}(C4)
+   edge [errorsling, bend right= 80]node[below left=0.05mm,text width=0.05cm]{\scriptsize{$\psi_{14}$}} (E14.310);
+\node[error] (E15) at (7,-11) {E15}
+   edge [post] node[auto,swap]{\small{1}}(C5)
+   edge [errorsling, bend right= 80]node[below left=0.05mm,text width=0.05cm]{\scriptsize{$\psi_{15}$}} (E15.310);
+   
+\end{tikzpicture}

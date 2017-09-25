@@ -1,0 +1,51 @@
+data{
+	int	N[3];
+	int	cons[4];
+	int	inco[4];
+	int	neut[4];
+}
+parameters{
+	real<lower=0,upper=1>	p;
+	real<lower=0,upper=1>	q;
+	real<lower=0,upper=1>	c;
+}
+transformed parameters{
+	real<lower=0,upper=1>	pq;
+	real<lower=0,upper=1>	pc;
+	real<lower=0,upper=1>	cpq;
+	simplex[4]				theta1;
+	simplex[4]				theta2;
+	simplex[4]				theta3;
+
+	pq <- p*q;
+	pc <- p*c;
+	cpq <- c*pq;
+
+	// consistent condition
+	theta1[1] <- ( 1 + p + q - pq + 4 * pc ) / 6;	# Eq. 10
+	theta1[2] <- ( 1 + p + q - pq - 2 * pc ) / 3;	# Eq. 11
+	theta1[3] <- ( 1 - p - q + pq ) / 6;			# Eq. 12
+	theta1[4] <- ( 1 - p - q + pq ) / 3;			# Eq. 13
+	
+	// inconsistent condition
+	theta2[1] <- ( 1 + p - q + pq + 4 * pc ) / 6;	# Eq. 14
+	theta2[2] <- ( 1 + p - q + pq - 2 * pc ) / 3;	# Eq. 15
+	theta2[3] <- ( 1 - p + q - pq ) / 6;			# Eq. 16
+	theta2[4] <- ( 1 - p + q - pq ) / 3;			# Eq. 17
+	
+	// neutral condition
+	theta3[1] <- ( 1 + p + 4 * pc ) / 6;			# Eq. 18
+	theta3[2] <- ( 1 + p - 2 * pc ) / 3;			# Eq. 19
+	theta3[3] <- ( 1 - p ) / 6;						# Eq. 20
+	theta3[4] <- ( 1 - p ) / 3;						# Eq. 21
+}
+model{
+	// priors
+	p ~ beta(1,1);									# Eq. 22
+	q ~ beta(1,1);									# Eq. 23
+	c ~ beta(1,1);									# Eq. 24
+	
+	cons ~ multinomial(theta1);						# Eq. 7
+	inco ~ multinomial(theta2);						# Eq. 8
+	neut ~ multinomial(theta3);						# Eq. 9
+}
