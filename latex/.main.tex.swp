@@ -1,0 +1,50 @@
+\documentclass[letter,12pt]{book}
+
+\input{preamble.tex}
+
+\title{Bayesian Inference for Psychology}
+\author{Edited by Joachim Vandekerckhove,\\Dora Matzke, and Eric-Jan Wagenmakers}
+\raggedbottom
+
+\begin{document}
+
+\thispagestyle{empty}
+
+  \cinclude{front}
+
+\frontmatter
+
+  \maketitle
+
+  \cinclude{acknowledgements}
+
+  \tableofcontents
+
+  \cinclude{prologue}
+  
+\mainmatter
+
+\part{Bayesian inference for psychology}
+
+  \cinclude{bi0}
+  \cinclude{bi1}
+  \cinclude{bi2}
+  \cinclude{bi3}
+  \cinclude{bi4}
+
+\part{Teaching resources}
+
+  \cinclude{zd1}
+  \cinclude{8st}
+  
+\part{Advanced topics}
+
+  \cinclude{ml1}
+  \cinclude{don}
+  \cinclude{em1}
+
+\backmatter
+
+  \include{cover}
+
+\end{document}
