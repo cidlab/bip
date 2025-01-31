@@ -3,6 +3,7 @@
 
 This repository contains materials and text for a free book titled "Bayesian Inference for Psychology."
 
+Download the book [here](./book.pdf).
 
 ## Table of Contents
 
@@ -24,9 +25,9 @@ This repository contains materials and text for a free book titled "Bayesian Inf
 
 ---
 
-This volume is produced by the (Cognition and Individual Differences Lab at the University of California, Irvine)[https://cidlab.com].
-
-The editors make no claim to any intellectual property that may belong to the contributors or their institutions.
+> [!NOTE]
+> This volume is produced by the [Cognition and Individual Differences Lab at the University of California, Irvine](https://cidlab.com).
+> The editors make no claim to any intellectual property that may belong to the contributors or their institutions.
 
 
 
